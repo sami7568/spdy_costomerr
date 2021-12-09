@@ -1,20 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
 import 'loading.dart';
 
 class Verify extends StatefulWidget {
+  const Verify({Key? key}) : super(key: key);
   @override
   _VerifyState createState() => _VerifyState();
 }
 
 class _VerifyState extends State<Verify> {
-  TextEditingController emailEditingController = new TextEditingController();
-  TextEditingController passEditingController = new TextEditingController();
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController passEditingController = TextEditingController();
 
   TextEditingController textEditingController = TextEditingController();
 
@@ -40,27 +40,27 @@ class _VerifyState extends State<Verify> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
-                    Text(
+                    const Text(
                       "Two-Step Verification",
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       "Please Enter the 6-Digit code sent via Email or Text to access your account.",
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 180,
                     ),
                     PinCodeTextField(
@@ -79,33 +79,36 @@ class _VerifyState extends State<Verify> {
                         selectedFillColor: Colors.white,
                         inactiveFillColor: Colors.white,
                       ),
-                      animationDuration: Duration(milliseconds: 300),
+                      animationDuration: const Duration(milliseconds: 300),
                       enableActiveFill: true,
                       errorAnimationController: errorController,
                       controller: textEditingController,
                       onCompleted: (v) {
+                        // ignore: avoid_print
                         print("Completed");
                         submitColor = buttonPressBlueColor();
                       },
                       onChanged: (value) {
+                        // ignore: avoid_print
                         print(value);
                         setState(() {
                           currentText = value;
                         });
                       },
                       beforeTextPaste: (text) {
+                        // ignore: avoid_print
                         print("Allowing to paste $text");
                         //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                         //but you can show anything you want here, like your pop up saying wrong paste format or etc
                         return true;
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> LoadingLogin()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoadingLogin()));
                       },
                       child: Center(
                               child: Container(
@@ -125,11 +128,12 @@ class _VerifyState extends State<Verify> {
                               ),
                             ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     GestureDetector(
                       onTap: () {
+                        // ignore: avoid_print
                         print("dilaog click");
                         dialog();
                       },
@@ -137,7 +141,7 @@ class _VerifyState extends State<Verify> {
                         alignment: Alignment.bottomCenter,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Text(
                               "Resend code",
                               style: TextStyle(
@@ -156,7 +160,7 @@ class _VerifyState extends State<Verify> {
                   alignment: Alignment.bottomCenter,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.cancel,
                         color: Colors.white,
@@ -184,12 +188,12 @@ class _VerifyState extends State<Verify> {
     showDialog(
       builder: (BuildContext context) {
         return Dialog(
-          child: Container(
+          child: SizedBox(
             height: 200,
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
+              children: const [
                 Text(
                     "We've sent a new\n6-Digit code to your Email.", textAlign: TextAlign.center,style: TextStyle(fontSize: 20),),
                 Icon(

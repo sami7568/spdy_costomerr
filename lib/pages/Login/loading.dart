@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
 class LoadingLogin extends StatefulWidget {
+  const LoadingLogin({Key? key}) : super(key: key);
+
   @override
   _LoadingLoginState createState() => _LoadingLoginState();
 }
@@ -19,7 +21,7 @@ class _LoadingLoginState extends State<LoadingLogin> {
           color: backgroundColor(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const [
              // ProgressIndicatorDemo(),
                DotsIndicator(
                  dotsCount: 3,

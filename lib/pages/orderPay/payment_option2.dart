@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
 class PaymentOptions2 extends StatefulWidget {
+  const PaymentOptions2({Key? key}) : super(key: key);
+
 
 
   @override
@@ -19,7 +21,7 @@ class _PaymentOptions2State extends State<PaymentOptions2> {
           child: Stack(
 
               children: [
-                Positioned(
+                const Positioned(
                     left: 30,
                     top: 70,
                     child: Text("Payment", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20))),
@@ -33,31 +35,31 @@ class _PaymentOptions2State extends State<PaymentOptions2> {
 
                         height: 60,
                         width: 280,
-                        child: Center(child: Text("Credit Card",style: TextStyle(color: Colors.white,fontSize: 20, fontWeight: FontWeight.bold), )),
+                        child: const Center(child: Text("Credit Card",style: TextStyle(color: Colors.white,fontSize: 20, fontWeight: FontWeight.bold), )),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             color: buttonPressBlueColor()
 
                         ),
                       ),
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
                       Container(
 
                         height: 60,
                         width: 280,
-                        child: Center(child: Text("Google Pay",style: TextStyle(color: Colors.black,fontSize: 20, fontWeight: FontWeight.bold), )),
+                        child: const Center(child: Text("Google Pay",style: TextStyle(color: Colors.black,fontSize: 20, fontWeight: FontWeight.bold), )),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             color: Colors.white
 
                         ),
                       ),
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
                       Container(
 
                         height: 60,
                         width: 280,
-                        child: Center(child: Text("Paypal",style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20))),
+                        child: const Center(child: Text("Paypal",style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20))),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             color: Colors.white
@@ -75,10 +77,11 @@ class _PaymentOptions2State extends State<PaymentOptions2> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
+                      // ignore: deprecated_member_use
                       FlatButton(
                         child: Row(
 
-                          children: [
+                          children: const [
                             Icon(Icons.navigate_before, color: Colors.white, size: 60,),
                             Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
 
@@ -89,11 +92,12 @@ class _PaymentOptions2State extends State<PaymentOptions2> {
                           //     duration: _kDuration, curve: _kCurve);
                         },
                       ),
+                      // ignore: deprecated_member_use
                       FlatButton(
                         child: Row(
-                          children: [
+                          children:const [
                             Text('Next', style: TextStyle(color: Colors.white, fontSize: 20),),
-                            Icon(Icons.navigate_next, color: Colors.white, size: 60,),
+                             Icon(Icons.navigate_next, color: Colors.white, size: 60,),
 
                           ],
                         ),

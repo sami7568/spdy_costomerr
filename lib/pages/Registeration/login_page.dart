@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
-class Register_1 extends StatefulWidget {
+class Register1 extends StatefulWidget {
+  const Register1({Key? key}) : super(key: key);
 
   @override
-  _Register_1State createState() => _Register_1State();
+  _Register1State createState() => _Register1State();
 }
 
-class _Register_1State extends State<Register_1> {
+class _Register1State extends State<Register1> {
   @override
   Widget build(BuildContext context) {
     return body();
@@ -33,9 +34,9 @@ class _Register_1State extends State<Register_1> {
                   children: [
                     SvgPicture.asset("assets/images/spdy.svg"),
 
-                    SizedBox(height: 50,),
-                    Text("Email or Phone Number", style: TextStyle(fontSize: 16, color: Colors.white),),
-                    TextField(
+                    const  SizedBox(height: 50,),
+                    const Text("Email or Phone Number", style: TextStyle(fontSize: 16, color: Colors.white),),
+                    const TextField(
 
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
@@ -49,10 +50,10 @@ class _Register_1State extends State<Register_1> {
 
                       style: TextStyle(fontSize: 14.0),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
 
-                    Text("Password", style: TextStyle(fontSize: 16, color: Colors.white),),
-                    TextField(
+                    const Text("Password", style: TextStyle(fontSize: 16, color: Colors.white),),
+                    const TextField(
                       obscureText: true,
 
                       keyboardType: TextInputType.visiblePassword,
@@ -68,13 +69,13 @@ class _Register_1State extends State<Register_1> {
 
                       style: TextStyle(fontSize: 14.0),
                     ),
-                    SizedBox(height: 10,),
+                    const  SizedBox(height: 10,),
                     Container(
 
 
                         alignment: Alignment.bottomRight,
-                        child: Text("Forget Password", style: TextStyle(fontSize: 16, color: Colors.white, decoration: TextDecoration.underline))),
-                    SizedBox(height: 100,),
+                        child:const Text("Forget Password", style: TextStyle(fontSize: 16, color: Colors.white, decoration: TextDecoration.underline))),
+                    const SizedBox(height: 100,),
 
 
                     Center(
@@ -85,7 +86,7 @@ class _Register_1State extends State<Register_1> {
                             borderRadius: BorderRadius.circular(50.0),
                             color: Colors.white
                         ),
-                        child: Center(
+                        child: const Center(
                             child: Text(
                               "Submit",
                               style: TextStyle(

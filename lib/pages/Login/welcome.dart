@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spdycustomers/pages/Login/login.dart';
 import 'package:spdycustomers/pages/Registeration/acc_reg.dart';
-import 'package:spdycustomers/pages/Registeration/select_reg.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
 class Welcome extends StatefulWidget {
 static const String idScreen = "welcome";
+
+  const Welcome({Key? key}) : super(key: key);
 
   @override
   _WelcomeState createState() => _WelcomeState();
@@ -36,9 +37,9 @@ class _WelcomeState extends State<Welcome> {
 
 
                     SvgPicture.asset("assets/images/spdy.svg"),
-                    SizedBox(height: 50,),
-                    Text("Welcome!", style: TextStyle(fontSize: 30, color: Colors.white),),
-                    SizedBox(height: 80,),
+                    const SizedBox(height: 50,),
+                    const Text("Welcome!", style: TextStyle(fontSize: 30, color: Colors.white),),
+                    const SizedBox(height: 80,),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -46,7 +47,7 @@ class _WelcomeState extends State<Welcome> {
                           registerColor = buttonPressBlueColor():
                           registerColor = Colors.white;
                         });
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Acc_reg()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const AccRegistration()));
                       },
                       child: Container(
                         width: 280,
@@ -65,7 +66,7 @@ class _WelcomeState extends State<Welcome> {
                             )),
                       ),
                     ),
-                    SizedBox(height: 30,),
+                    const SizedBox(height: 30,),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -73,7 +74,7 @@ class _WelcomeState extends State<Welcome> {
                           loginColor = buttonPressBlueColor():
                           loginColor = Colors.white;
                         });
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
                       },
                       child: Container(
                         width: 280,
@@ -94,7 +95,7 @@ class _WelcomeState extends State<Welcome> {
                     ),
                   ],
                 ),
-                Align(
+                const Align(
                     alignment: Alignment.bottomCenter,
                     child: Text("©SPDY Technologies, LLC", style: TextStyle(fontSize: 15, color: Colors.white),)),
               ],

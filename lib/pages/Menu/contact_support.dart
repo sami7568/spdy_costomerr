@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +5,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
-class Contact_support extends StatefulWidget {
+class ContactSupport extends StatefulWidget {
+  const ContactSupport({Key? key}) : super(key: key);
+
   @override
-  _Contact_supportState createState() => _Contact_supportState();
+  _ContactSupportState createState() => _ContactSupportState();
 }
 
-class _Contact_supportState extends State<Contact_support> {
-  Completer<GoogleMapController> _controller = Completer();
+class _ContactSupportState extends State<ContactSupport> {
   late GoogleMapController newGoogleMapController;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -33,13 +33,9 @@ class _Contact_supportState extends State<Contact_support> {
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
 
-  Color _containerColor = Colors.white;
-  Color _textColor = buttonPressBlueColor();
+  final Color _containerColor = Colors.white;
+  final Color _textColor = buttonPressBlueColor();
 
   @override
   Widget build(BuildContext context) {

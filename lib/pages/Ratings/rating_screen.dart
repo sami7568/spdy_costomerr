@@ -1,22 +1,24 @@
+// @dart=2.9
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 import 'package:spdycustomers/pages/Menu/home_page.dart';
+import 'package:spdycustomers/pages/Ratings/why.dart';
 
-class TellUsWhy extends StatefulWidget {
-  const TellUsWhy({Key? key}) : super(key: key);
+class RatingScreen extends StatefulWidget {
+  const RatingScreen({Key key}) : super(key: key);
 
   @override
-  _TellUsWhyState createState() => _TellUsWhyState();
+  _RatingScreenState createState() => _RatingScreenState();
 }
 
-class _TellUsWhyState extends State<TellUsWhy> {
-  TextEditingController textareaController = TextEditingController();
+class _RatingScreenState extends State<RatingScreen> {
   double starCounter = 0;
   Color submitcolor = buttonUnPressColor();
   Color submittextcolor = textblackColor();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class _TellUsWhyState extends State<TellUsWhy> {
                     const Text(
                       "Rate Order", style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),),
                     const SizedBox(height: 15,),
-                    Container(
+                     Container(
                       height: 100,
                         width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
@@ -59,31 +61,75 @@ class _TellUsWhyState extends State<TellUsWhy> {
                           ),
                         ),
                     ),
-                    const SizedBox(height: 30,),
-                    const Text("Tell us what happened",style: TextStyle(fontSize: 22,color: Colors.white),),
-                    const SizedBox(height:10),
-                    Container(
-                      decoration: const BoxDecoration(
+                    const SizedBox(height: 140,),
+                      Center(
+                      child: SmoothStarRating(
+                        rating: starCounter,
                         color: Colors.white,
-                      ),
-                      child: TextField(
-                        controller: textareaController,
-                        decoration: const InputDecoration(
-                          border:  OutlineInputBorder(),
-                          hintText: 'Type here…',
-                        ),
-                        onChanged : (value){
-                          //change color
-                          changecolr(value);
+                        borderColor: Colors.white,
+                        allowHalfRating: false,
+                        starCount: 5,
+                        spacing: 4.0,
+                        size: 60,
+                        onRated: (value){
+                              if(value==0) {
+                                setState(() {
+                                submitcolor = buttonUnPressColor();
+                                submittextcolor = textblackColor();
+                                });
+                              }
+                          starCounter = value;
+                          if(starCounter==1){
+                            setState(() {
+                              submitcolor = buttonPressColor();
+                              submittextcolor = textWhiteColor();
+                           //   title="Very Bad";
+                            });
+                          }
+                        if(starCounter==2){
+                            setState(() {
+                              submitcolor = buttonPressColor();
+                              submittextcolor = textWhiteColor();
+                            //  title="Bad";
+                            });
+                          }
+                          if(starCounter==3){
+                            setState(() {
+                              submitcolor = buttonPressColor();
+                              submittextcolor = textWhiteColor();
+                              //title="Good";
+                            });
+                          }
+                          if(starCounter==4){
+                            setState(() {
+                              submitcolor = buttonPressColor();
+                              submittextcolor = textWhiteColor();
+                              //title="Very Good";
+                            });
+                          }
+                          if(starCounter==5){
+                            setState(() {
+                              submitcolor = buttonPressColor();
+                              submittextcolor = textWhiteColor();
+                             // title="Excellent";
+                            });
+                          }
                         },
-                        maxLines: 13,
                       ),
                     ),
-                    const SizedBox(height:30),
+                    const SizedBox(height:100),
                     Center(
                       child: GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          starCounter<=3?
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const TellUsWhy()))
+                          : Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()));
                         },
                         child: Container(
                           width: 280,
@@ -111,7 +157,7 @@ class _TellUsWhyState extends State<TellUsWhy> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: const [
-                      Icon(Icons.menu, color: Colors.white, size: 39,),
+                      Icon(Icons.menu, color: Colors.white, size: 50,),
                       Text("Menu", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),)
                     ],
                   ),
@@ -122,27 +168,4 @@ class _TellUsWhyState extends State<TellUsWhy> {
       ),
     );
   }
-
-
-  void changecolr(String value){
-    if(value.isNotEmpty)
-    {
-      setState(() {
-        submitcolor = buttonPressColor();
-        submittextcolor = textWhiteColor();
-      });
-    }
-    else{
-      setState(() {
-        submitcolor = buttonUnPressColor();
-        submittextcolor = textblackColor();
-        // ignore: avoid_print
-        print("colors changed");
-        // ignore: avoid_print
-        print(value.length);
-      });
-    }
-  }
 }
-
-

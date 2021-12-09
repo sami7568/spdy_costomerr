@@ -3,14 +3,14 @@ import 'package:spdycustomers/pages/Menu/home_page.dart';
 import 'package:spdycustomers/Widgets/button.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
-class NotificationSetting extends StatefulWidget {
-  const NotificationSetting({Key? key}) : super(key: key);
+class MapSettings extends StatefulWidget {
+  const MapSettings({Key? key}) : super(key: key);
 
   @override
-  _NotificationSettingState createState() => _NotificationSettingState();
+  _MapSettingsState createState() => _MapSettingsState();
 }
 
-class _NotificationSettingState extends State<NotificationSetting> {
+class _MapSettingsState extends State<MapSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +19,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
           width: MediaQuery.of(context).size.width,
           color: backgroundColor(),
           child: Padding(
-            padding: const EdgeInsets.only(top: 60, bottom: 20, left: 35,right: 35),
+            padding: const EdgeInsets.only(top: 80, bottom: 20, left: 35,right: 35),
             child: Stack(
               children: [
                 Column(
@@ -31,22 +31,21 @@ class _NotificationSettingState extends State<NotificationSetting> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
                           Text(
-                            "Notification",
+                            "Default Map",
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
                             ),
                           ),
-                          Icon(Icons.cancel, color: Colors.white ,size: 35,)
-                        ],
+                          Icon(Icons.cancel, color: Colors.white, size: 40,)                      ],
                       ),
                     ),
 
-                    const Text("Notify me via",style:TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        ),
+                    const Text("Default Map",style:TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
                     ),
 
 
@@ -59,11 +58,11 @@ class _NotificationSettingState extends State<NotificationSetting> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: const [
                             Text(
-                              "Email",
-                              style: TextStyle(
+                                "SPDY",
+                                style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,
-                              )                          ),
+                                )                          ),
                             Icon(Icons.arrow_drop_down)
 
                           ],
@@ -80,7 +79,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       child: const Padding(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          "Text message",
+                            "Google Maps",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -98,7 +97,6 @@ class _NotificationSettingState extends State<NotificationSetting> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
                         },
                         child: buttonn("Save Changes")),
-
 
                   ],
                 ),
@@ -122,7 +120,6 @@ class _NotificationSettingState extends State<NotificationSetting> {
                     ],
                   ),
                 ),
-
               ],
             ),
           )),

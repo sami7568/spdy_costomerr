@@ -1,6 +1,5 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:spdycustomer/pages/AccountSetting/accountSettings.dart';
 // import 'package:spdycustomer/pages/Registeration/acc_reg.dart';
 // import 'package:spdycustomer/Widgets/colors.dart';
 //

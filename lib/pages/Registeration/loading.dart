@@ -1,8 +1,8 @@
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
 class LoadingReg extends StatefulWidget {
+  const LoadingReg({Key? key}) : super(key: key);
   @override
   _LoadingRegState createState() => _LoadingRegState();
 }
@@ -19,7 +19,7 @@ class _LoadingRegState extends State<LoadingReg> {
         color: backgroundColor(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: const [
             ProgressIndicatorDemo(),
             // DotsIndicator(
             //   dotsCount: 3,
@@ -50,10 +50,12 @@ class _LoadingRegState extends State<LoadingReg> {
 
 
 class ProgressIndicatorDemo extends StatefulWidget {
+  const ProgressIndicatorDemo({Key? key}) : super(key: key);
+
 
   @override
   _ProgressIndicatorDemoState createState() =>
-      new _ProgressIndicatorDemoState();
+      _ProgressIndicatorDemoState();
 }
 
 class _ProgressIndicatorDemoState extends State<ProgressIndicatorDemo>
@@ -84,8 +86,8 @@ class _ProgressIndicatorDemoState extends State<ProgressIndicatorDemo>
 
   @override
   Widget build(BuildContext context) {
-    return new Center(
-        child: new Container(
+    return Center(
+        child: Container(
           color: Colors.white,
           child:  LinearProgressIndicator(
             backgroundColor: Colors.white,

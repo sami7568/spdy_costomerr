@@ -1,21 +1,20 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spdycustomers/pages/Menu/contact_support.dart';
-import 'package:spdycustomers/Widgets/button.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
 class History extends StatefulWidget {
+  const History({Key? key}) : super(key: key);
+
   @override
   _HistoryState createState() => _HistoryState();
 }
 
 class _HistoryState extends State<History> {
 
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController newGoogleMapController;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -36,7 +35,7 @@ class _HistoryState extends State<History> {
 
   }
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static const CameraPosition _kGooglePlex =  CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -58,10 +57,11 @@ class _HistoryState extends State<History> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
+                    // ignore: avoid_print
                     print("records");
                   },
                   child: Row(
-                    children: [
+                    children: const [
                       Icon(Icons.navigate_before, color: Colors.white, size: 60,),
                       Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
                     ],
@@ -93,10 +93,10 @@ class _HistoryState extends State<History> {
 
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
 
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: GoogleMap(
                           padding: EdgeInsets.only(bottom: bottomPaddingOfMap),
@@ -112,7 +112,7 @@ class _HistoryState extends State<History> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
 
                     GestureDetector(
                       onTap: () {
@@ -120,7 +120,7 @@ class _HistoryState extends State<History> {
                           _textColor = Colors.white;
                           _containerColor = buttonPressBlueColor();
                         });
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> Contact_support()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ContactSupport()));
                       },
                       child: Center(
                         child: Container(
@@ -153,7 +153,7 @@ class _HistoryState extends State<History> {
                   alignment: Alignment.bottomCenter,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.menu,
                         color: Colors.white,

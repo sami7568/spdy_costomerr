@@ -1,5 +1,6 @@
 class Data{
 
+  static String? siginkey="false";
   //pickup address and dropoff address
   static String? pickupPlaceName;
   static String? pickupLatitude ;

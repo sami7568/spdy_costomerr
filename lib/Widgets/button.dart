@@ -11,7 +11,7 @@ Widget pressedButtonn(String text) {
       child: Center(
           child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
       )),
     ),
@@ -31,7 +31,7 @@ Widget button(String text) {
       child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 20),
@@ -51,7 +51,7 @@ Widget pressedButton(String text) {
       child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           )),
     ),
@@ -71,7 +71,7 @@ Widget buttonn(String text) {
       child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 20),

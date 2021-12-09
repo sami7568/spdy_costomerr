@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import 'package:spdycustomers/Model/JsonData/loginResponse.dart';
-import 'package:spdycustomers/assistant/apiServices.dart';
-import 'package:spdycustomers/dataHandler/UpdateData.dart';
-import 'package:spdycustomers/dataHandler/appData.dart';
-import 'package:spdycustomers/pages/Login/verify.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spdycustomers/Model/JsonData/login_response.dart';
+import 'package:spdycustomers/assistant/api_services.dart';
+import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
-import 'package:spdycustomers/pages/Menu/onlineNearby.dart';
+import 'package:spdycustomers/pages/Menu/home_page.dart';
 import 'package:spdycustomers/pages/Registeration/acc_reg.dart';
+import 'package:spdycustomers/prefdata.dart';
 
-import '../../Model/JsonData/loginResponse.dart';
-import '../../assistant/apiServices.dart';
-import '../../dataHandler/UpdateData.dart';
+import '../../Model/JsonData/login_response.dart';
+import '../../assistant/api_services.dart';
+import '../../dataHandler/update_data.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
 
   @override
   _LoginState createState() => _LoginState();
@@ -22,8 +22,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  TextEditingController phoneEditingController = new TextEditingController();
-  TextEditingController passEditingController = new TextEditingController();
+  TextEditingController phoneEditingController = TextEditingController();
+  TextEditingController passEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +43,17 @@ class _LoginState extends State<Login> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 15,),
-                    Text("Enter your Login info to access your SPDY Account", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 50,),
+                    const SizedBox(height: 15,),
+                    const Text("Enter your Login info to access your SPDY Account", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 50,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Phone Number", style: TextStyle(fontSize: 15, color: Colors.white),),
+                        const Text("Phone Number", style: TextStyle(fontSize: 15, color: Colors.white),),
                         TextField(
                           controller: phoneEditingController,
                           keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Colors.white,
@@ -61,17 +61,17 @@ class _LoginState extends State<Login> {
                               hintStyle:
                               TextStyle(color: Colors.grey, fontSize: 14.0)),
 
-                          style: TextStyle(fontSize: 14.0),
+                          style: const TextStyle(fontSize: 14.0),
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
 
-                        Text("Password", style: TextStyle(fontSize: 15, color: Colors.white),),
+                        const Text("Password", style: TextStyle(fontSize: 15, color: Colors.white),),
                         TextField(
                           controller: passEditingController,
                           obscureText: true,
 
                           keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               focusColor: Colors.black,
                               border: InputBorder.none,
                               filled: true,
@@ -80,26 +80,19 @@ class _LoginState extends State<Login> {
                               hintStyle:
                               TextStyle(color: Colors.grey, fontSize: 13.0)),
 
-                          style: TextStyle(fontSize: 14.0),
+                          style: const TextStyle(fontSize: 14.0),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     Container(
                         alignment: Alignment.bottomRight,
-                        child: Text("Forget Password", style: TextStyle(fontSize: 16, color: Colors.white, decoration: TextDecoration.underline))),
-                    SizedBox(height: 100,),
+                        child: const Text("Forget Password", style: TextStyle(fontSize: 16, color: Colors.white, decoration: TextDecoration.underline))),
+                    const SizedBox(height: 100,),
 
                     GestureDetector(
                       onTap: () async{
                         validate();
-                        //dynamic res  = await ApiServices.user_booking_list();
-                        // if(res==200){
-                        //   print("pass");
-                        // }
-                        // else{
-                        //   print(" hhhh failed");
-                        // }
                       },
                       child: Center(
                         child: Container(
@@ -109,7 +102,7 @@ class _LoginState extends State<Login> {
                               borderRadius: BorderRadius.circular(50.0),
                               color: buttonPressBlueColor()
                           ),
-                          child: Center(
+                          child: const Center(
                               child: Text(
                                 "Login",
                                 style: TextStyle(
@@ -127,13 +120,13 @@ class _LoginState extends State<Login> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Don't Have an Account? ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),),
+                      const Text("Don't Have an Account? ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),),
                       GestureDetector(
                           onTap: (){
                             Navigator.push(
-                                context, MaterialPageRoute(builder: (context) => Acc_reg()));
+                                context, MaterialPageRoute(builder: (context) => const AccRegistration()));
                           },
-                          child: Text("Register", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold,decoration: TextDecoration.underline),))
+                          child:const Text("Register", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold,decoration: TextDecoration.underline),))
                     ],
                   ),
                 ),
@@ -145,6 +138,7 @@ class _LoginState extends State<Login> {
 
 
     validate()async{
+    // ignore: avoid_print
     print("validating");
     // if(!validateStructure(passEditingController.text)){
     //   setState(() {
@@ -160,22 +154,35 @@ class _LoginState extends State<Login> {
     String password = passEditingController.text;
 
       if (phone.isEmpty || password.isEmpty ) {
+        // ignore: avoid_print
         print("fill your data please");
+        awesomedialog("Error","Please fill all the fields", context);
       return;
       }
       else {
-       LoginResponse res =  await ApiServices.loginUser(phone, password);
+        showdialog("please wait", context);
+        LoginResponse res =  await ApiServices.loginUser(phone, password);
+       Navigator.pop(context);
         if(res.status==200){
           //dialog
+          showdialog("please wait", context);
           //save provider data
           UpdateData().updateLoginData(res,context);
           makeFeildsEmpty();
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.setString(Data.siginkey!, "true");
+
+         String? a= pref.getString(Data.siginkey!);
+          // ignore: avoid_print
+          print(a!);
+          Navigator.pop(context);
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+              context, MaterialPageRoute(builder: (context) => const HomePage()));
         }
         else{
           //dialog
-
+          awesomedialog("Error",res.msg, context);
+          // ignore: avoid_print
           print("failed");
         }
     }
