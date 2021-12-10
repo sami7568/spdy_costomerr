@@ -55,16 +55,18 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
 
   @override
   void initState() {
-    // SharedPreferences.setMockInitialValues({});
     locatePosition();
     markers.clear();
     super.initState();
   }
   setpickupdropoffvalues(){
-    String? pickupplace = Provider.of<AppData>(context,listen:false).pickupPlaceName;
-    String? dropoffplace = Provider.of<AppData>(context,listen:false).dropoffPlaceName;
-    pickupAddressController.text = pickupplace!;
-    dropoffAddressController.text = dropoffplace!;
+    // print(Provider.of<AppData>(context,listen:false).pickupPlaceName.toString());
+    // print(Provider.of<AppData>(context,listen:false).dropoffPlaceName.toString());
+
+    String? pickupplace = Provider.of<AppData>(context,listen:false).pickupPlaceName.toString();
+    String? dropoffplace = Provider.of<AppData>(context,listen:false).dropoffPlaceName.toString();
+    pickupAddressController.text = pickupplace;
+    dropoffAddressController.text = dropoffplace;
     addpolyy();
   }
   @override
@@ -285,7 +287,10 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     currentPosition = position;
-    LatLng latLatPosition = LatLng(currentPosition.latitude,currentPosition.longitude);
+    LatLng latLatPosition = LatLng(
+        Provider.of<AppData>(context,listen: false).pickupLatitude,
+        Provider.of<AppData>(context,listen: false).pickupLongitude
+    );
    CameraPosition cameraPosition = CameraPosition(target: latLatPosition, zoom: 14);
     newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
@@ -316,11 +321,15 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     List<LatLng> polylineCoordinates = [];
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       "AIzaSyA5QBupZfYDYDMVGNOC53nGAF7K5FuDa1I",
-      PointLatLng(Provider.of<AppData>(context,listen:false).pickupLatitude, Provider.of<AppData>(context,listen:false).pickupLongitude),
-      PointLatLng(Provider.of<AppData>(context,listen:false).dropoffLatitude,Provider.of<AppData>(context,listen:false).dropoffLongitude),
+      PointLatLng(Provider.of<AppData>(context,listen:false).pickupLatitude,
+          Provider.of<AppData>(context,listen:false).pickupLongitude),
+      PointLatLng(Provider.of<AppData>(context,listen:false).dropoffLatitude,
+          Provider.of<AppData>(context,listen:false).dropoffLongitude),
       travelMode: TravelMode.driving,
     );
+    print("getting poly");
     if (result.points.isNotEmpty) {
+      print("ponint not empty");
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
@@ -333,7 +342,6 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
   void addpolyy()async{
     String? pickupplace =Provider.of<AppData>(context,listen:false).pickupPlaceName!;
     String? dropoffplace =Provider.of<AppData>(context,listen:false).dropoffPlaceName!;
-
 
     if( pickupLocationSelected! && dropoffLocationSelected!){
       getPolyline();

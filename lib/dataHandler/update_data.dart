@@ -47,7 +47,7 @@ class UpdateData{
       Provider.of<AppData>(context,listen: false).updatePickUpAddressess(pickplace, picklat, picklong);
   }
   void updateDropOffData(String dropplace, double droplat,double droplong,BuildContext context){
-    Provider.of<AppData>(context,listen: false).updatePickUpAddressess(dropplace, droplat, droplong);
+    Provider.of<AppData>(context,listen: false).updateDropOffAddressess(dropplace, droplat, droplong);
   }
 
 

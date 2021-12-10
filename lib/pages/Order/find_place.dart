@@ -374,7 +374,6 @@ class _PredictionTileState extends State<PredictionTile> {
         setState(() {
         pickupLocationSelected = true;
         });
-
         String pickupPlaceName="";
         double pickupLatitude=34.0067324;
         double pickupLongitude= 71.5537812;
@@ -388,10 +387,12 @@ class _PredictionTileState extends State<PredictionTile> {
         setState(() {
           dropoffLocationSelected = true;
         });
-        String dropoffPlaceName="";
+        String? dropoffPlaceName="";
         double dropoffLatitude=34.0011235;
         double dropoffLongitude=71.5593617;
         dropoffPlaceName = address.placeName.toString();
+        print("dropof place name ");
+        print(dropoffPlaceName);
         dropoffLatitude = address.latitude!;
         dropoffLongitude = address.longitude!;
         UpdateData().updateDropOffData(dropoffPlaceName, dropoffLatitude, dropoffLongitude, context);
