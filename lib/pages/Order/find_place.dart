@@ -7,11 +7,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:spdycustomers/Model/mapData/address.dart';
 import 'package:spdycustomers/Model/mapData/direction_details.dart';
 import 'package:spdycustomers/Model/mapData/place_prediction.dart';
 import 'package:spdycustomers/Widgets/divider.dart';
 import 'package:spdycustomers/assistant/request_assistant.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
+import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/global_variables.dart';
 import 'package:spdycustomers/pages/Order/location_info.dart';
 import 'package:spdycustomers/pages/Order/place_order.dart';
@@ -29,8 +32,6 @@ class FindPlace extends StatefulWidget {
 double _originLatitude = 34.0067324;
 // Starting point longitude
 double _originLongitude = 71.5537812;
-// Destination latitude ,
-// Destination Longitude
 // Markers to show points on the map
 Map<MarkerId, Marker> markers = {};
 
@@ -84,154 +85,7 @@ class _FindPlaceState extends State<FindPlace> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: backgroundColor(),
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 30, top: 60, right: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text("Location Information", style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 20,),
-                    const Text("Address", style: TextStyle(fontSize: 17, color: Colors.white, )),
-                    const SizedBox(height: 1,),
-                    Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextField(
-                            onChanged: (val){
-                              findplace(val, widget.selectlocat);
-                            },
-                            decoration: InputDecoration(hintText: "Enter your Address",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
-                            ),
-                          ),
-                        )
-                    ),
-                    const SizedBox(height: 10,),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.gps_fixed_outlined,
-                        ),
-                        const SizedBox(width: 10,),
-                        GestureDetector(
-                            onTap: (){
-                              locatePosition();
-                            },
-                            child: const Text(
-                                "Locate me",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                ))),
-                      ],
-                    ),
-                    const SizedBox(height: 10,),
-                    Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 90),
-                          child: GoogleMap(
-                            mapType: MapType.normal,
-                            myLocationButtonEnabled: false,
-                            initialCameraPosition: _kGooglePlex,
-                            myLocationEnabled: true,
-                            tiltGesturesEnabled: true,
-                            compassEnabled: true,
-                            scrollGesturesEnabled: true,
-                            zoomGesturesEnabled: true,
-                            zoomControlsEnabled: true,
-                            polylines: Set<Polyline>.of(polylines.values),
-                            markers: Set<Marker>.of(markers.values),
-                            onMapCreated: (GoogleMapController controller) {
-                              _controller.complete(controller);
-                              newGoogleMapController = controller;
-                              //locatePosition();
-                            },
-                          ),
-                        )
-                    )
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      // ignore: deprecated_member_use
-                      FlatButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-
-                          children: const [
-                            Icon(Icons.navigate_before, color: Colors.white, size: 60,),
-                            Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
-
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      // Text("Step 1 of 4", style: TextStyle(fontSize: 15, color: Colors.white),),
-                      // ignore: deprecated_member_use
-                      FlatButton(
-                        child: Row(
-                          children: const [
-                            Text('Next', style: TextStyle(color: Colors.white, fontSize: 20),),
-                            Icon(Icons.navigate_next, color: Colors.white, size: 60,),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const PlaceOrder()));
-                        },
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: predcontainertop,
-                left: 80,
-                right: 40,
-                bottom: predcontainerbuttom,
-                child:
-                (placesPredictionList.isNotEmpty)
-                    ? Container(
-                        height: predictionheight,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 7.0),
-                          child: ListView.separated(
-                            padding: const EdgeInsets.all(0.0),
-                            itemBuilder:(context,index){
-                              return PredictionTile(placePredictions: placesPredictionList[index],seleclocation: widget.selectlocat,);
-                            },
-                            separatorBuilder: (BuildContext context, int index)=> const DividerWidget(),
-                            itemCount: placesPredictionList.length,
-                            shrinkWrap: true,
-                            physics: const ClampingScrollPhysics(),
-                    ),),
-                )
-                    : Container(),
-              ),
-            ],
-          )),
-    );
+    return body();
   }
   void findplace(String placeName,String pickdrop)async
   {
@@ -277,7 +131,181 @@ class _FindPlaceState extends State<FindPlace> with TickerProviderStateMixin {
       }
     }
   }
+
+  body(){
+    return Scaffold(
+      body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: backgroundColor(),
+          child: Stack(
+            children: [
+              getFields(),
+              getNav(),
+             predicList(),
+            ],
+          )),
+    );
+  }
+
+  getFields(){
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, top: 60, right: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text("Location Information", style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20,),
+          const Text("Address", style: TextStyle(fontSize: 17, color: Colors.white, )),
+          const SizedBox(height: 1,),
+          gettextfiel(),
+          const SizedBox(height: 10,),
+          getLocateButton(),
+          const SizedBox(height: 10,),
+          getmap(),
+        ],
+      ),
+    );
+  }
+  gettextfiel(){
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TextField(
+            onTap: (){
+            },
+            autofocus: true,
+            onChanged: (val){
+              findplace(val, widget.selectlocat);
+            },
+            decoration: InputDecoration(hintText: "Enter your Address",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
+            ),
+          ),
+        )
+    );
+  }
+  getLocateButton(){
+    return GestureDetector(
+      onTap: (){
+        locatePosition();
+      },
+      child: Row(
+        children: const [
+          Icon(
+            Icons.gps_fixed_outlined,
+          ),
+          SizedBox(width: 10,),
+          Text(
+              "Locate me",
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.white,
+              )),
+        ],
+      ),
+    );
+  }
+  getmap(){
+    return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 90),
+          child: GoogleMap(
+            mapType: MapType.normal,
+            myLocationButtonEnabled: false,
+            initialCameraPosition: _kGooglePlex,
+            myLocationEnabled: true,
+            tiltGesturesEnabled: true,
+            compassEnabled: true,
+            scrollGesturesEnabled: true,
+            zoomGesturesEnabled: true,
+            zoomControlsEnabled: true,
+            polylines: Set<Polyline>.of(polylines.values),
+            markers: Set<Marker>.of(markers.values),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+              newGoogleMapController = controller;
+              //locatePosition();
+            },
+          ),
+        )
+    );
+  }
+  getNav(){
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            // ignore: deprecated_member_use
+            FlatButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+
+                children: const [
+                  Icon(Icons.navigate_before, color: Colors.white, size: 60,),
+                  Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
+
+                ],
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            // Text("Step 1 of 4", style: TextStyle(fontSize: 15, color: Colors.white),),
+            // ignore: deprecated_member_use
+            FlatButton(
+              child: Row(
+                children: const [
+                  Text('Next', style: TextStyle(color: Colors.white, fontSize: 20),),
+                  Icon(Icons.navigate_next, color: Colors.white, size: 60,),
+                ],
+              ),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const PlaceOrder()));
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+  predicList(){
+    return  Positioned(
+      top: predcontainertop,
+      left: 80,
+      right: 40,
+      bottom: predcontainerbuttom,
+      child:
+      (placesPredictionList.isNotEmpty)
+          ? Container(
+        height: predictionheight,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 7.0),
+          child: ListView.separated(
+            padding: const EdgeInsets.all(0.0),
+            itemBuilder:(context,index){
+              return PredictionTile(placePredictions: placesPredictionList[index],seleclocation: widget.selectlocat,);
+            },
+            separatorBuilder: (BuildContext context, int index)=> const DividerWidget(),
+            itemCount: placesPredictionList.length,
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+          ),),
+      )
+          : Container(),
+    );
+  }
 }
+
 
 
 class PredictionTile extends StatefulWidget {
@@ -340,46 +368,33 @@ class _PredictionTileState extends State<PredictionTile> {
       address.placeId = placeId;
       address.latitude = res["result"]["geometry"]["location"]["lat"];
       address.longitude = res["result"]["geometry"]["location"]["lng"];
-      //
-      // //save these info
-      //  SharedPreferences prefs = await SharedPreferences.getInstance();
-      // if(widget.seleclocation == "pick")
-      // {
-      //
-      //   pickupLocationSelected = true;
-      //
-      //   await prefs.setString(
-      //       Data.pickupPlaceName!, address.placeName.toString());
-      //   await prefs.setString(
-      //       Data.pickupLatitude!, address.latitude.toString());
-      //   await prefs.setString(
-      //       Data.pickupLongitude!, address.longitude.toString());
-      // }
-      // else
-      //   {
-      //     dropoffLocationSelected = true;
-      //
-      //     await prefs.setString(
-      //         Data.dropoffPlaceName!, address.placeName.toString());
-      //     await prefs.setString(
-      //         Data.dropoffLatitude!, address.latitude.toString());
-      //     await prefs.setString(
-      //         Data.dropoffLongitude!, address.longitude.toString());
-      //   }
+     
       if(widget.seleclocation=="pick") {
+        print("pick");
         setState(() {
-        // ignore: avoid_print
-        print("pickuplocatio;lldsjfal;j");
         pickupLocationSelected = true;
+        });
+
+        String pickupPlaceName="";
+        double pickupLatitude=34.0067324;
+        double pickupLongitude= 71.5537812;
         pickupPlaceName = address.placeName.toString();
         pickupLatitude = address.latitude!;
         pickupLongitude = address.longitude!;
-      });
-      } else{
-        dropoffLocationSelected = true;
+        UpdateData().updatePickUpdata(pickupPlaceName, pickupLatitude, pickupLongitude, context);
+      }
+      else{
+        print("drop");
+        setState(() {
+          dropoffLocationSelected = true;
+        });
+        String dropoffPlaceName="";
+        double dropoffLatitude=34.0011235;
+        double dropoffLongitude=71.5593617;
         dropoffPlaceName = address.placeName.toString();
         dropoffLatitude = address.latitude!;
         dropoffLongitude = address.longitude!;
+        UpdateData().updateDropOffData(dropoffPlaceName, dropoffLatitude, dropoffLongitude, context);
       }
       Navigator.pop(context);
     }

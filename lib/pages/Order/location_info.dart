@@ -4,11 +4,15 @@
 
 import 'dart:async';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:spdycustomers/Model/mapData/direction_details.dart';
 import 'package:spdycustomers/Model/mapData/place_prediction.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
+import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/global_variables.dart';
 import 'package:spdycustomers/pages/Order/find_place.dart';
 import 'package:spdycustomers/pages/Order/place_order.dart';
@@ -17,9 +21,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 // ignore: must_be_immutable
 class LocationInfo extends StatefulWidget {
-
-  String? twoingService;
-  LocationInfo({Key? key, this.twoingService}) : super(key: key);
+  const LocationInfo({Key? key}) : super(key: key);
   @override
   _LocationInfoState createState() => _LocationInfoState();
 }
@@ -38,7 +40,7 @@ TextEditingController dropoffAddressController = TextEditingController();
 class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMixin {
   final Completer<GoogleMapController> _controller = Completer();
 
-  late GoogleMapController? newGoogleMapController;
+  late GoogleMapController newGoogleMapController;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   late DirectionDetails tripDirectionDetails;
   List<LatLng> pLineCoordinates = [];
@@ -54,19 +56,43 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
   @override
   void initState() {
     // SharedPreferences.setMockInitialValues({});
-   // markers.clear();
+    locatePosition();
+    markers.clear();
     super.initState();
   }
   setpickupdropoffvalues(){
-    // ignore: unnecessary_null_comparison
-    pickupAddressController.text = null!= pickupPlaceName?pickupPlaceName.toString(): "";
-    // ignore: unnecessary_null_comparison
-    dropoffAddressController.text = dropoffPlaceName!=null?dropoffPlaceName.toString():"";
+    String? pickupplace = Provider.of<AppData>(context,listen:false).pickupPlaceName;
+    String? dropoffplace = Provider.of<AppData>(context,listen:false).dropoffPlaceName;
+    pickupAddressController.text = pickupplace!;
+    dropoffAddressController.text = dropoffplace!;
     addpolyy();
   }
   @override
   Widget build(BuildContext context) {
     setpickupdropoffvalues();
+    return body();
+  }
+  getmap(){
+    return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 90),
+          child: GoogleMap(
+            mapType: MapType.normal,
+            myLocationButtonEnabled: false,
+            initialCameraPosition: _kGooglePlex,
+            myLocationEnabled: true,
+            polylines: Set<Polyline>.of(polylines.values),
+            markers: Set<Marker>.of(markers.values),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+              newGoogleMapController = controller;
+              //locatePosition();
+            },
+          ),
+        )
+    );
+  }
+  body(){
     return Scaffold(
       body: Stack(
         children: [
@@ -76,142 +102,8 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
               color: backgroundColor(),
               child: Stack(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, top: 60, right: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Location Information", style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 20,),
-                        const Text("Pick-Up", style: TextStyle(fontSize: 17, color: Colors.white, )),
-                        const SizedBox(height: 1,),
-                        Container(
-                            padding:const EdgeInsets.symmetric(horizontal: 10),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: TextField(
-                                onTap: (){
-                                  // ignore: avoid_print
-                                  print("tapped");
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FindPlace(selectlocat: "pick",)));
-                                },
-                                controller: pickupAddressController,
-                                decoration: InputDecoration(
-                                  hintText: "Enter your Address",
-                                  hintStyle: TextStyle(color: Colors.grey[500]),
-                                  border:InputBorder.none,
-                                ),
-                              ),
-                            )
-                        ),
-                        const SizedBox(height: 5,),
-                        const Text("Drop-Off", style: TextStyle(fontSize: 17, color: Colors.white, )),
-                        const SizedBox(height: 1,),
-                        Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: TextField(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FindPlace(selectlocat: "drop",)));
-                                },
-                                controller: dropoffAddressController,
-                                decoration: InputDecoration(hintText: "Enter your Address",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
-                                ),
-                              ),
-                            )
-                        ),
-                        const SizedBox(height: 10,),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.gps_fixed_outlined,
-                            ),
-                            const SizedBox(width: 10,),
-                            GestureDetector(
-                                onTap: (){
-                                  locatePosition();
-                                },
-                                child: const Text(
-                                    "Locate me",
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.white,
-                                    ))),
-                          ],
-                        ),
-                        const SizedBox(height: 10,),
-                        Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 90),
-                              child: GoogleMap(
-                                mapType: MapType.normal,
-                                myLocationButtonEnabled: false,
-                                initialCameraPosition: _kGooglePlex,
-                                myLocationEnabled: true,
-                                tiltGesturesEnabled: true,
-                                compassEnabled: true,
-                                scrollGesturesEnabled: true,
-                                zoomGesturesEnabled: true,
-                                zoomControlsEnabled: true,
-                                polylines: Set<Polyline>.of(polylines.values),
-                                markers: Set<Marker>.of(markers.values),
-                                onMapCreated: (GoogleMapController controller) {
-                                  _controller.complete(controller);
-                                  newGoogleMapController = controller;
-                                  //locatePosition();
-                                },
-                              ),
-                            )
-                        )
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          // ignore: deprecated_member_use
-                          FlatButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-
-                              children: const [
-                                Icon(Icons.navigate_before, color: Colors.white, size: 60,),
-                                Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
-
-                              ],
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          // Text("Step 1 of 4", style: TextStyle(fontSize: 15, color: Colors.white),),
-                          // ignore: deprecated_member_use
-                          FlatButton(
-                            child: Row(
-                              children: const [
-                                Text('Next', style: TextStyle(color: Colors.white, fontSize: 20),),
-                                Icon(Icons.navigate_next, color: Colors.white, size: 60,),
-                              ],
-                            ),
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const PlaceOrder()));
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                  )
+                  getFields(),
+                  getNav(),
                 ],
               )),
           // Positioned(
@@ -245,22 +137,163 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
       ),
     );
   }
+  getNav(){
+    return  Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            // ignore: deprecated_member_use
+            backButton(),
+            // Text("Step 1 of 4", style: TextStyle(fontSize: 15, color: Colors.white),),
+            // ignore: deprecated_member_use
+            forwardButton()
+          ],
+        ),
+      ),
+    );
+  }
+  backButton(){
+    return FlatButton(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const [
+          Icon(Icons.navigate_before, color: Colors.white, size: 60,),
+          Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
+        ],
+      ),
+      onPressed: () {
+        backalert();
+        //Navigator.pop(context);
+      },
+    );
+  }
+  backalert(){
+    return  AwesomeDialog(
+        context: context,
+        title: "Warning",
+        desc: "Are You Sure You want to go back",
+        dialogType: DialogType.WARNING,
+        btnCancelOnPress: (){},
+        btnOkOnPress: (){
+          Navigator.pop(context);
+        }
+    ).show();
+  }
+  forwardButton(){
+    return FlatButton(
+      child: Row(
+        children: const [
+          Text('Next', style: TextStyle(color: Colors.white, fontSize: 20),),
+          Icon(Icons.navigate_next, color: Colors.white, size: 60,),
+        ],
+      ),
+      onPressed: () {
+        //
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const PlaceOrder()));
+      },
+    );
+  }
+  getFields(){
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, top: 60, right: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Location Information", style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20,),
+          const Text("Pick-Up", style: TextStyle(fontSize: 17, color: Colors.white, )),
+          const SizedBox(height: 1,),
+          pickUpfield(),
+          const SizedBox(height: 5,),
+          const Text("Drop-Off", style: TextStyle(fontSize: 17, color: Colors.white, )),
+          const SizedBox(height: 1,),
+          dropoffField(),
+          const SizedBox(height: 10,),
+          locatemeButton(),
+          const SizedBox(height: 10,),
+          getmap(),
+        ],
+      ),
+    );
+  }
+  locatemeButton(){
+    return Row(
+      children: [
+        const Icon(
+          Icons.gps_fixed_outlined,
+        ),
+        const SizedBox(width: 10,),
+        GestureDetector(
+            onTap: (){
+              locatePosition();
+            },
+            child: const Text(
+                "Locate me",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.white,
+                ))),
+      ],
+    );
+  }
+  pickUpfield(){
+    return Container(
+        padding:const EdgeInsets.symmetric(horizontal: 10),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TextField(
+            onTap: (){
+              // ignore: avoid_print
+              print("tapped");
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FindPlace(selectlocat: "pick",)));
+            },
+            controller: pickupAddressController,
+            decoration: InputDecoration(
+              hintText: "Enter your Address",
+              hintStyle: TextStyle(color: Colors.grey[500]),
+              border:InputBorder.none,
+            ),
+          ),
+        )
+    );
+  }
+  dropoffField(){
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TextField(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FindPlace(selectlocat: "drop",)));
+            },
+            controller: dropoffAddressController,
+            decoration: InputDecoration(hintText: "Enter your Address",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
+            ),
+          ),
+        )
+    );
+  }
+
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     currentPosition = position;
-
-    LatLng latLatPosition = LatLng(pickupLatitude,pickupLongitude);
-   CameraPosition cameraPosition =
-
-   CameraPosition(target: latLatPosition, zoom: 14);
-    newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    LatLng latLatPosition = LatLng(currentPosition.latitude,currentPosition.longitude);
+   CameraPosition cameraPosition = CameraPosition(target: latLatPosition, zoom: 14);
+    newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(pickupLatitude, pickupLongitude),
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(34.0067324, 71.5537812),
     zoom: 14.4746,
   );
-
   // This method will add markers to the map based on the LatLng position
   addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
     MarkerId markerId = MarkerId(id);
@@ -279,13 +312,12 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     polylines[id] = polyline;
     setState(() {});
   }
-
   void getPolyline() async {
     List<LatLng> polylineCoordinates = [];
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       "AIzaSyA5QBupZfYDYDMVGNOC53nGAF7K5FuDa1I",
-      PointLatLng(pickupLatitude, pickupLongitude),
-      PointLatLng(dropoffLatitude,dropoffLongitude),
+      PointLatLng(Provider.of<AppData>(context,listen:false).pickupLatitude, Provider.of<AppData>(context,listen:false).pickupLongitude),
+      PointLatLng(Provider.of<AppData>(context,listen:false).dropoffLatitude,Provider.of<AppData>(context,listen:false).dropoffLongitude),
       travelMode: TravelMode.driving,
     );
     if (result.points.isNotEmpty) {
@@ -298,24 +330,27 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     }
     addPolyLine(polylineCoordinates);
   }
-
   void addpolyy()async{
-    if(pickupLocationSelected == true && dropoffLocationSelected == true){
+    String? pickupplace =Provider.of<AppData>(context,listen:false).pickupPlaceName!;
+    String? dropoffplace =Provider.of<AppData>(context,listen:false).dropoffPlaceName!;
+
+
+    if( pickupLocationSelected! && dropoffLocationSelected!){
       getPolyline();
       locatePosition();
     }
-  else if(pickupLocationSelected==true) {
+  else if(pickupLocationSelected!) {
       // add origin marker origin marker
       addMarker(
-        LatLng(pickupLatitude, pickupLongitude),
+        LatLng(Provider.of<AppData>(context,listen:false).pickupLatitude,Provider.of<AppData>(context,listen:false).pickupLongitude ),
         "origin",
         BitmapDescriptor.defaultMarker,
       );
     }
-   else if(dropoffLocationSelected == true){
+   else if(dropoffLocationSelected!){
     // Add destination marker
     addMarker(
-      LatLng(dropoffLatitude, dropoffLongitude),
+      LatLng(Provider.of<AppData>(context,listen:false).dropoffLatitude, Provider.of<AppData>(context,listen:false).dropoffLongitude),
       "destination",
       BitmapDescriptor.defaultMarkerWithHue(90),
     );

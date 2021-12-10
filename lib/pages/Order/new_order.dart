@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/pages/Order/car_info.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
@@ -67,16 +68,7 @@ class _NewOrderState extends State<NewOrder> {
     return FlatButton(
       onPressed: () {
         //dialogue
-        AwesomeDialog(
-            context: context,
-          title: "No Order",
-          desc: "You didn't make an order! Sure to Exit",
-          dialogType: DialogType.WARNING,
-          btnCancelOnPress: (){},
-          btnOkOnPress: (){
-              Navigator.pop(context);
-          }
-        ).show();
+       backAllert();
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -104,13 +96,8 @@ class _NewOrderState extends State<NewOrder> {
           dialogue();
           return;
         }
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CarInfo(
-          towingCheck: towingCheck,
-          newBatteryCheck: newBatteryCheck,
-          jumeCheck: jumeCheck,
-          outGasCheck: outGasCheck,
-          spareCheck: spareCheck,
-        )));
+        UpdateData().updateCheckApplicable(towingCheck, spareCheck, jumeCheck, outGasCheck, newBatteryCheck, context);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CarInfo()));
       },
     );
   }
@@ -292,5 +279,18 @@ class _NewOrderState extends State<NewOrder> {
         // Navigator.pop(context);
       },
     )..show();
+  }
+
+  backAllert(){
+    return  AwesomeDialog(
+        context: context,
+        title: "No Order",
+        desc: "You didn't make an order!\nAre You Sure to Exit",
+        dialogType: DialogType.WARNING,
+        btnCancelOnPress: (){},
+        btnOkOnPress: (){
+          Navigator.pop(context);
+        }
+    ).show();
   }
 }

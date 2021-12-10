@@ -1,12 +1,15 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
+import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/pages/Order/choose_service.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
+import 'package:spdycustomers/pages/Order/location_info.dart';
 
 class CarInfo extends StatefulWidget {
 
-   const CarInfo({Key? key, this.towingCheck,this.spareCheck,this.outGasCheck,this.jumeCheck,this.newBatteryCheck,}) : super(key: key);
-  final bool? towingCheck,spareCheck,jumeCheck,outGasCheck,newBatteryCheck;
+   const CarInfo({Key? key,}) : super(key: key);
 
   @override
   _CarInfoState createState() => _CarInfoState();
@@ -65,9 +68,7 @@ class _CarInfoState extends State<CarInfo> {
           getCarYear(),
           getDtype(),
           const SizedBox(height: 5,),
-          widget.towingCheck==true?
-          getWeightType()
-              :Container(),
+          Provider.of<AppData>(context,listen: false).towingCheck==true? getWeightType() :Container(),
         ],
       ),
     );
@@ -339,76 +340,90 @@ class _CarInfoState extends State<CarInfo> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             // ignore: deprecated_member_use
-            FlatButton(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Icon(Icons.navigate_before, color: Colors.white, size: 60,),
-                  Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
-
-                ],
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            getBackButton(),
             const Text("Step 2 of 4", style: TextStyle(fontSize: 15, color: Colors.white),),
             // ignore: deprecated_member_use
-            FlatButton(
-
-              child: Row(
-                children: const [
-                  Text('Next', style: TextStyle(color: Colors.white, fontSize: 20),),
-                  Icon(Icons.navigate_next, color: Colors.white, size: 60,),
-                ],
-              ),
-              onPressed: () {
-                //check all fields are selected
-                if(_carMakerchosenValue==null || _carModelchosenValue==null || carInfoTextEditingController.text.isEmpty ||wdChooseValue==-1){
-                  // ignore: avoid_print
-                  print("please check what you missed");
-                  //dialogue
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.WARNING,
-                    title: 'Error',
-                    desc: 'Please check all fields.....',
-                    btnOkOnPress: () {
-                      // Navigator.pop(context);
-                    },
-                  ).show();
-                  return;
-                }
-                if(widget.towingCheck==true){
-                  if(cardColor == Colors.white && cardColor1 == Colors.white && cardColor2 == Colors.white){
-                    // ignore: avoid_print
-                    print("please choose two weight");
-                    //dialogue
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.WARNING,
-                      title: 'Error',
-                      desc: 'Please choose two weight.....',
-                      btnOkOnPress: () {
-                        // Navigator.pop(context);
-                      },
-                    ).show();
-                    return;
-                  }
-                }
-
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseService(
-                  carMakerchosenValue: _carMakerchosenValue,
-                  carModelchosenValue: _carModelchosenValue,
-                  caryear: carInfoTextEditingController.text,
-                  wdChooseValue: wdChooseValue,
-                  selectedWeight: chooseweight,
-                )));
-              },
-            )
+            getForwardButton(),
           ],
         ),
       ),
     );
+  }
+  getForwardButton(){
+    return FlatButton(
+      child: Row(
+        children: const [
+          Text('Next', style: TextStyle(color: Colors.white, fontSize: 20),),
+          Icon(Icons.navigate_next, color: Colors.white, size: 60,),
+        ],
+      ),
+      onPressed: () {
+        bool? twingcheck = Provider.of<AppData>(context,listen: false).towingCheck==true;
+        //check all fields are selected
+        if(_carMakerchosenValue==null || _carModelchosenValue==null || carInfoTextEditingController.text.isEmpty ||wdChooseValue==-1){
+          // ignore: avoid_print
+          print("please check what you missed");
+          //dialogue
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.WARNING,
+            title: 'Error',
+            desc: 'Please check all fields.....',
+            btnOkOnPress: () {
+              // Navigator.pop(context);
+            },
+          ).show();
+          return;
+        }
+        if(twingcheck){
+          if(cardColor == Colors.white && cardColor1 == Colors.white && cardColor2 == Colors.white){
+            // ignore: avoid_print
+            print("please choose two weight");
+            //dialogue
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.WARNING,
+              title: 'Error',
+              desc: 'Please choose two weight.....',
+              btnOkOnPress: () {
+                // Navigator.pop(context);
+              },
+            ).show();
+            return;
+          }
+        }
+
+        UpdateData().updateCarInfo(_carMakerchosenValue, _carModelchosenValue, chooseweight, wdChooseValue, context);
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>twingcheck? ChooseService():LocationInfo()));
+      },
+
+    );
+  }
+  getBackButton(){
+    return FlatButton(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const [
+          Icon(Icons.navigate_before, color: Colors.white, size: 60,),
+          Text('Back', style: TextStyle(color: Colors.white, fontSize: 20),),
+        ],
+      ),
+      onPressed: () {
+        backalert();
+       // Navigator.pop(context);
+      },
+    );
+  }
+  backalert(){
+    return  AwesomeDialog(
+        context: context,
+        title: "Warning",
+        desc: "Are You Sure You want to go back",
+        dialogType: DialogType.WARNING,
+        btnCancelOnPress: (){},
+        btnOkOnPress: (){
+          Navigator.pop(context);
+        }
+    ).show();
   }
 }
