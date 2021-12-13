@@ -7,13 +7,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:spdycustomers/Model/mapData/address.dart';
 import 'package:spdycustomers/Model/mapData/direction_details.dart';
 import 'package:spdycustomers/Model/mapData/place_prediction.dart';
 import 'package:spdycustomers/Widgets/divider.dart';
 import 'package:spdycustomers/assistant/request_assistant.dart';
-import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/global_variables.dart';
 import 'package:spdycustomers/pages/Order/location_info.dart';
@@ -69,6 +67,13 @@ class _FindPlaceState extends State<FindPlace> with TickerProviderStateMixin {
     print(currentPosition.altitude);
     // ignore: avoid_print
     print(currentPosition.latitude);
+
+    if(widget.selectlocat=="pick"){
+
+    }
+    else{
+
+    }
 
     CameraPosition cameraPosition =
     CameraPosition(target: latLatPosition, zoom: 14);
@@ -306,8 +311,6 @@ class _FindPlaceState extends State<FindPlace> with TickerProviderStateMixin {
   }
 }
 
-
-
 class PredictionTile extends StatefulWidget {
   final PlacePredictions placePredictions;
   String seleclocation;
@@ -370,6 +373,7 @@ class _PredictionTileState extends State<PredictionTile> {
       address.longitude = res["result"]["geometry"]["location"]["lng"];
      
       if(widget.seleclocation=="pick") {
+        // ignore: avoid_print
         print("pick");
         setState(() {
         pickupLocationSelected = true;
@@ -383,6 +387,7 @@ class _PredictionTileState extends State<PredictionTile> {
         UpdateData().updatePickUpdata(pickupPlaceName, pickupLatitude, pickupLongitude, context);
       }
       else{
+        // ignore: avoid_print
         print("drop");
         setState(() {
           dropoffLocationSelected = true;
@@ -391,7 +396,9 @@ class _PredictionTileState extends State<PredictionTile> {
         double dropoffLatitude=34.0011235;
         double dropoffLongitude=71.5593617;
         dropoffPlaceName = address.placeName.toString();
+        // ignore: avoid_print
         print("dropof place name ");
+        // ignore: avoid_print
         print(dropoffPlaceName);
         dropoffLatitude = address.latitude!;
         dropoffLongitude = address.longitude!;

@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart';
 import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/dataHandler/update_data.dart';
@@ -350,6 +351,7 @@ class _CarInfoState extends State<CarInfo> {
     );
   }
   getForwardButton(){
+    // ignore: deprecated_member_use
     return FlatButton(
       child: Row(
         children: const [
@@ -394,12 +396,13 @@ class _CarInfoState extends State<CarInfo> {
         }
 
         UpdateData().updateCarInfo(_carMakerchosenValue, _carModelchosenValue, chooseweight, wdChooseValue, context);
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>twingcheck? ChooseService():LocationInfo()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>twingcheck? const ChooseService():const LocationInfo()));
       },
 
     );
   }
   getBackButton(){
+    // ignore: deprecated_member_use
     return FlatButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

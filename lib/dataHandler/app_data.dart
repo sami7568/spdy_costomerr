@@ -26,7 +26,7 @@ class AppData extends ChangeNotifier{
   
   //twoingserviece booking step 3
   void updateTowingService(String towingService){
-    this.twoingService = towingService;
+    twoingService = towingService;
     notifyListeners();
   }
   //car info booking step2

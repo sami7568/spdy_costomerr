@@ -245,15 +245,15 @@ class ApiServices{
 
   //add_credit_card
   // ignore: unnecessary_question_mark
-  static Future<dynamic?> addCreditCard() async {
+  static Future<dynamic?> addCreditCard(String? userId,String? userName, String? cardNumber, String? expiration,String? digitNumber) async {
     final response = await http.post(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/add_credit_card'),
         body: {
-          "user_id" :"33",
-          "card_name":"habeeb",
-          "card_number":"123393940909",
-          "expiration":"2022",
-          "digit_number":"123",
+          "user_id" :userId,
+          "card_name":userName,
+          "card_number":cardNumber,
+          "expiration":expiration,
+          "digit_number":digitNumber,
         }
     );
     // ignore: avoid_print

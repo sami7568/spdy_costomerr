@@ -1,6 +1,6 @@
 // ignore: duplicate_ignore
 // ignore: file_names
-// ignore_for_file: file_names
+// ignore_for_file: file_names, import_of_legacy_library_into_null_safe
 
 import 'dart:async';
 
@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:spdycustomers/Model/mapData/direction_details.dart';
 import 'package:spdycustomers/Model/mapData/place_prediction.dart';
 import 'package:spdycustomers/dataHandler/app_data.dart';
-import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/global_variables.dart';
 import 'package:spdycustomers/pages/Order/find_place.dart';
 import 'package:spdycustomers/pages/Order/place_order.dart';
@@ -40,7 +39,7 @@ TextEditingController dropoffAddressController = TextEditingController();
 class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMixin {
   final Completer<GoogleMapController> _controller = Completer();
 
-  late GoogleMapController newGoogleMapController;
+  GoogleMapController? newGoogleMapController;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   late DirectionDetails tripDirectionDetails;
   List<LatLng> pLineCoordinates = [];
@@ -57,8 +56,16 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
   void initState() {
     locatePosition();
     markers.clear();
+    polylines.clear();
     super.initState();
   }
+
+  @override
+  void dispose() {
+    polylines.clear();
+    super.dispose();
+  }
+
   setpickupdropoffvalues(){
     // print(Provider.of<AppData>(context,listen:false).pickupPlaceName.toString());
     // print(Provider.of<AppData>(context,listen:false).dropoffPlaceName.toString());
@@ -107,34 +114,7 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
                   getFields(),
                   getNav(),
                 ],
-              )),
-          // Positioned(
-          //   top: predcontainertop,
-          //   left: 80,
-          //   right: 40,
-          //   bottom: predcontainerbuttom,
-          //    child:
-          //    (placesPredictionList.length>0)
-          //       ? Container(
-          //         height: predictionheight,
-          //         decoration: BoxDecoration(
-          //           color: Colors.white,
-          //         ),
-          //         child: Padding(
-          //           padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 7.0),
-          //           child: ListView.separated(
-          //             padding: EdgeInsets.all(0.0),
-          //             itemBuilder:(context,index){
-          //               return PredictionTile(placePredictions: placesPredictionList[index],);
-          //             },
-          //             separatorBuilder: (BuildContext context, int index)=> DividerWidget(),
-          //             itemCount: placesPredictionList.length,
-          //             shrinkWrap: true,
-          //             physics: ClampingScrollPhysics(),
-          //           ),),
-          //       )
-          //        : Container(),
-          // ),
+              ))
         ],
       ),
     );
@@ -159,6 +139,7 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     );
   }
   backButton(){
+    // ignore: deprecated_member_use
     return FlatButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -186,6 +167,7 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     ).show();
   }
   forwardButton(){
+    // ignore: deprecated_member_use
     return FlatButton(
       child: Row(
         children: const [
@@ -292,7 +274,7 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
         Provider.of<AppData>(context,listen: false).pickupLongitude
     );
    CameraPosition cameraPosition = CameraPosition(target: latLatPosition, zoom: 14);
-    newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
   static const CameraPosition _kGooglePlex = CameraPosition(
@@ -300,10 +282,16 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     zoom: 14.4746,
   );
   // This method will add markers to the map based on the LatLng position
-  addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
+  addMarker(LatLng position, String id, BitmapDescriptor descriptor, String? name) {
     MarkerId markerId = MarkerId(id);
     Marker marker =
-    Marker(markerId: markerId, icon: descriptor, position: position);
+    Marker(
+      infoWindow: const InfoWindow(
+        title: "pickup",
+        snippet: ""
+      ),
+        markerId: markerId, icon: descriptor, position: position
+    );
     markers[markerId] = marker;
   }
   // This method will add polyline to the map based on the origin and destination position
@@ -327,8 +315,10 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
           Provider.of<AppData>(context,listen:false).dropoffLongitude),
       travelMode: TravelMode.driving,
     );
+    // ignore: avoid_print
     print("getting poly");
     if (result.points.isNotEmpty) {
+      // ignore: avoid_print
       print("ponint not empty");
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
@@ -340,10 +330,14 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     addPolyLine(polylineCoordinates);
   }
   void addpolyy()async{
-    String? pickupplace =Provider.of<AppData>(context,listen:false).pickupPlaceName!;
-    String? dropoffplace =Provider.of<AppData>(context,listen:false).dropoffPlaceName!;
 
     if( pickupLocationSelected! && dropoffLocationSelected!){
+      addMarker(
+        LatLng(Provider.of<AppData>(context,listen:false).dropoffLatitude, Provider.of<AppData>(context,listen:false).dropoffLongitude),
+        "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90),
+        Provider.of<AppData>(context).dropoffPlaceName,
+      );
       getPolyline();
       locatePosition();
     }
@@ -353,6 +347,7 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
         LatLng(Provider.of<AppData>(context,listen:false).pickupLatitude,Provider.of<AppData>(context,listen:false).pickupLongitude ),
         "origin",
         BitmapDescriptor.defaultMarker,
+        Provider.of<AppData>(context).pickupPlaceName,
       );
     }
    else if(dropoffLocationSelected!){
@@ -361,6 +356,7 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
       LatLng(Provider.of<AppData>(context,listen:false).dropoffLatitude, Provider.of<AppData>(context,listen:false).dropoffLongitude),
       "destination",
       BitmapDescriptor.defaultMarkerWithHue(90),
+      Provider.of<AppData>(context).dropoffPlaceName,
     );
     }
   }

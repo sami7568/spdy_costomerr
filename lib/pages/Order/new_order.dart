@@ -97,7 +97,7 @@ class _NewOrderState extends State<NewOrder> {
           return;
         }
         UpdateData().updateCheckApplicable(towingCheck, spareCheck, jumeCheck, outGasCheck, newBatteryCheck, context);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CarInfo()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const CarInfo()));
       },
     );
   }
