@@ -13,8 +13,7 @@ class AppData extends ChangeNotifier{
   String? uId; String? uName;
 
   //signout data
-  String? signout;
-  String? signin;
+  String? signout;String? signin;
   
   //towing service step 3
   String twoingService="";
@@ -22,17 +21,31 @@ class AppData extends ChangeNotifier{
   //checking applicable booking step1
   bool towingCheck = false;bool spareCheck = false;bool jumeCheck = false;bool outGasCheck = false;bool newBatteryCheck = false;
   //car info booking step2
-  String? carMakerchosenValue;String? carModelchosenValue;String? chooseweight;int wdChooseValue=-1;
-  
+  String? carMakerchosenValue, carModelchosenValue,carYear, chooseweight;int wdChooseValue=-1;
+
+  //credit card no, credit, apple pay,
+  String? cardNo; String? cardexpiry; String? cardpin; String? NameCard;bool? saveCardData;
+
+  //update credit, apple pay, card data
+  void updateCardInfo(String? cardNo, String? cardexpiry, String? cardpin, String? NameCard,bool? saveCardData){
+    this.cardNo = cardNo;
+    this.cardexpiry = cardexpiry;
+    this.cardpin = cardpin;
+    this.NameCard = NameCard;
+    this.saveCardData = saveCardData;
+    notifyListeners();
+  }
+
   //twoingserviece booking step 3
   void updateTowingService(String towingService){
     twoingService = towingService;
     notifyListeners();
   }
   //car info booking step2
-  void updatecarinfo(String? carMakerchosenValue,String? carModelchosenValue,String? chooseweight,int wdChooseValue){
+  void updatecarinfo(String? carMakerchosenValue,String? carModelchosenValue,String? carYear,String? chooseweight,int wdChooseValue){
     this.carModelchosenValue = carModelchosenValue;
     this.carMakerchosenValue=carMakerchosenValue;
+    this.carYear = carYear;
     this.chooseweight = chooseweight;
     this.wdChooseValue = wdChooseValue;
     notifyListeners();
@@ -87,7 +100,7 @@ class AppData extends ChangeNotifier{
     notifyListeners();
   }
 
-
+  //update signin status
   void updateSigninStatus(String? signin){
     signin = signin;
     notifyListeners();

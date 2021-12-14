@@ -231,6 +231,7 @@ class _CarInfoState extends State<CarInfo> {
         child: Align(
           alignment: Alignment.centerLeft,
           child: TextField(
+            keyboardType: TextInputType.number,
             controller: carInfoTextEditingController,
             decoration: InputDecoration(
               hintText: "1900",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
@@ -395,7 +396,7 @@ class _CarInfoState extends State<CarInfo> {
           }
         }
 
-        UpdateData().updateCarInfo(_carMakerchosenValue, _carModelchosenValue, chooseweight, wdChooseValue, context);
+        UpdateData().updateCarInfo(_carMakerchosenValue, _carModelchosenValue, chooseweight,carInfoTextEditingController.text, wdChooseValue, context);
         Navigator.push(context, MaterialPageRoute(builder: (context) =>twingcheck? const ChooseService():const LocationInfo()));
       },
 

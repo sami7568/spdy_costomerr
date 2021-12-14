@@ -176,9 +176,18 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
         ],
       ),
       onPressed: () {
-        //
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const PlaceOrder()));
-      },
+        String? pick = Provider.of<AppData>(context,listen: false).pickupPlaceName;
+        String? drop = Provider.of<AppData>(context,listen: false).dropoffPlaceName;
+
+        if(pick!.isEmpty || drop!.isEmpty){
+          forwardalert();
+        }
+        else {
+          getTrueServices();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const PlaceOrder()));
+        }
+        },
     );
   }
   getFields(){
@@ -265,6 +274,17 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
         )
     );
   }
+  forwardalert(){
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      title: 'Error',
+      desc: 'Please choose Pick/Drop Address.....',
+      btnOkOnPress: () {
+        // Navigator.pop(context);
+      },
+    ).show();
+  }
 
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
@@ -288,7 +308,7 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     Marker(
       infoWindow: const InfoWindow(
         title: "pickup",
-        snippet: ""
+        snippet: "pickuplocation"
       ),
         markerId: markerId, icon: descriptor, position: position
     );
@@ -358,6 +378,35 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
       BitmapDescriptor.defaultMarkerWithHue(90),
       Provider.of<AppData>(context).dropoffPlaceName,
     );
+    }
+  }
+
+  getTrueServices() {
+    bool battery =  Provider.of<AppData>(context,listen: false).newBatteryCheck;
+    bool towing=  Provider.of<AppData>(context,listen: false).towingCheck;
+    bool outgas =  Provider.of<AppData>(context,listen: false).outGasCheck;
+    bool jump = Provider.of<AppData>(context,listen: false).jumeCheck;
+    bool spare = Provider.of<AppData>(context,listen: false).spareCheck;
+    String  towingService = Provider.of<AppData>(context,listen: false).twoingService;
+
+    if(battery){
+      orderList.add("New Battery Install");
+    }
+    if(towing){
+      orderList.add("$towingService towing");
+    }
+    if(outgas){
+      orderList.add("Out of Gas Delivery");
+    }
+    if(jump){
+      orderList.add("JumpStart");
+    }
+    if(spare){
+      orderList.add("Spare Tire Change");
+    }
+    for (var element in orderList) {
+      // ignore: avoid_print
+      print( element);
     }
   }
 }

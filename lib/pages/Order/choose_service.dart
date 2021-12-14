@@ -255,7 +255,6 @@ class _ChooseServiceState extends State<ChooseService> {
         else{
           //update service
           UpdateData().updateTowingService(selectedTowingService, context);
-          getTrueServices();
           Navigator.push(context, MaterialPageRoute(builder: (context) => const LocationInfo()));
         }
       },
@@ -284,33 +283,4 @@ class _ChooseServiceState extends State<ChooseService> {
         }
     ).show();
   }
-  getTrueServices() {
-    bool battery =  Provider.of<AppData>(context,listen: false).newBatteryCheck;
-    bool towing=  Provider.of<AppData>(context,listen: false).towingCheck;
-    bool outgas =  Provider.of<AppData>(context,listen: false).outGasCheck;
-    bool jump = Provider.of<AppData>(context,listen: false).jumeCheck;
-    bool spare = Provider.of<AppData>(context,listen: false).spareCheck;
-    String  towingService = Provider.of<AppData>(context,listen: false).twoingService;
-
-    if(battery){
-      orderList.add("New Battery Install");
-    }
-    if(towing){
-      orderList.add("$towingService towing");
-    }
-    if(outgas){
-      orderList.add("Out of Gas Delivery");
-    }
-    if(jump){
-      orderList.add("JumpStart");
-    }
-    if(spare){
-      orderList.add("Spare Tire Change");
-    }
-    for (var element in orderList) {
-      // ignore: avoid_print
-      print( element);
-    }
-  }
-
 }

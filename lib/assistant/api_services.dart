@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:spdycustomers/Model/JsonData/add_credit_card_response.dart';
 import 'package:spdycustomers/Model/JsonData/booking_response.dart';
@@ -84,19 +85,30 @@ class ApiServices{
   }
 
   //booking api
-  static Future<String?> booking() async {
+  static Future<String?> booking(String? carModel,String? carMaker,String? carYear,int? wdType,String? uId,String? driver_id,
+      String? odate, String? otime, String? pickupLocation,String? dropLocation,String? bookingtype,String? service,double? amount,
+      double? pickuplat,double?pickuplong, double? dropLat,double? dropLong) async {
+
     final response = await http.post(
       Uri.parse('https://spdytowtruck.com/admin-panel/api/User/booking'),
       body: {
-    "user_id":"1234",
-    "driver_id":"341",
-    "pick_up_location":"peshawar uni",
-    "drop_of_location":"saddar",
-    "booking_type":"abc",
-    "order_date":"1/2/21",
-    "order_time":"2:32",
-    "service":"ads",
-    "amount":"122",
+          "user_id":uId,
+          "driver_id":"1",
+          "pick_up_location":pickupLocation,
+          "drop_of_location":dropLocation,
+          "booking_type":bookingtype,
+          "order_date":odate,
+          "order_time":otime,
+          "service":service,
+          "amount":amount,
+          "car_maker":carMaker,
+          "car_model":carModel,
+          "car_year":carYear,
+          "wd_type":wdType,
+          "pickup_Lat":pickuplat,
+          "pickup_Long":pickuplong,
+        "drop_Lat":dropLat,
+        "drop_Long":dropLong,
       },
     );
     try
@@ -245,12 +257,13 @@ class ApiServices{
 
   //add_credit_card
   // ignore: unnecessary_question_mark
-  static Future<dynamic?> addCreditCard(String? userId,String? userName, String? cardNumber, String? expiration,String? digitNumber) async {
+  static Future<AddCreditCardResponse?> addCreditCard(String? userId,String? cardName, String? cardNumber, String? expiration,
+      String? digitNumber) async {
     final response = await http.post(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/add_credit_card'),
         body: {
           "user_id" :userId,
-          "card_name":userName,
+          "card_name":cardName,
           "card_number":cardNumber,
           "expiration":expiration,
           "digit_number":digitNumber,
@@ -268,7 +281,7 @@ class ApiServices{
       AddCreditCardResponse addCreditCardResponse = AddCreditCardResponse.fromJson(valueMap);
       // ignore: avoid_print
       print(addCreditCardResponse.cardInfo!.userId);
-      return addCreditCardResponse.status;
+      return addCreditCardResponse;
       }
     else{
       // ignore: avoid_print

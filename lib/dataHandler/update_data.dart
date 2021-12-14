@@ -34,8 +34,8 @@ class UpdateData{
     Provider.of<AppData>(context,listen: false).updatecheckdata(towingCheck, spareCheck, jumeCheck, outGasCheck, newBatteryCheck);
   }
   //update carinfo booking step_2
-  void updateCarInfo(String? carMakerchosenValue,String? carModelchosenValue,String? chooseweight,int wdChooseValue,BuildContext context){
-    Provider.of<AppData>(context,listen: false).updatecarinfo(carMakerchosenValue, carModelchosenValue, chooseweight, wdChooseValue);
+  void updateCarInfo(String? carMakerchosenValue,String? carModelchosenValue,String? chooseweight,String? carYear,int wdChooseValue,BuildContext context){
+    Provider.of<AppData>(context,listen: false).updatecarinfo(carMakerchosenValue, carModelchosenValue, carYear ,chooseweight, wdChooseValue);
   }
   //update towing service
   void updateTowingService(String? towingService,BuildContext context) {
@@ -43,6 +43,7 @@ class UpdateData{
         towingService!);
   }
 
+  //update pickupdata drop off data
   void updatePickUpdata(String pickplace,double picklat,double picklong,BuildContext context){
       Provider.of<AppData>(context,listen: false).updatePickUpAddressess(pickplace, picklat, picklong);
   }
@@ -50,5 +51,9 @@ class UpdateData{
     Provider.of<AppData>(context,listen: false).updateDropOffAddressess(dropplace, droplat, droplong);
   }
 
+  //update card info credit apple pay
+  void updateCardInfo(String? cardNo, String? cardexpiry, String? cardpin, String? NameCard,bool? saveCardData,BuildContext context){
+    Provider.of<AppData>(context,listen: false).updateCardInfo(cardNo, cardexpiry, cardpin, NameCard,saveCardData);
+  }
 
 }
