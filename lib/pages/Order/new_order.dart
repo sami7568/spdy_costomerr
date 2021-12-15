@@ -69,7 +69,6 @@ class _NewOrderState extends State<NewOrder> {
     return FlatButton(
       onPressed: () {
         //dialogue
-
        backAllert();
       },
       child: Row(

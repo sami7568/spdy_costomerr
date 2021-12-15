@@ -7,11 +7,15 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:spdycustomers/Map/client_map1.dart';
 import 'package:spdycustomers/Model/JsonData/add_credit_card_response.dart';
+import 'package:spdycustomers/Model/JsonData/booking_response.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 import 'package:spdycustomers/assistant/api_services.dart';
 import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/dataHandler/update_data.dart';
+import 'package:spdycustomers/pages/Menu/home_page.dart';
 import 'package:spdycustomers/pages/Registeration/acc_reg.dart';
+
+import '../../global_variables.dart';
 
 class PaymentDetails extends StatefulWidget {
   const PaymentDetails({Key? key, this.cardName}) : super(key: key);
@@ -75,6 +79,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
               alignment: Alignment.centerLeft,
               child: TextField(
                 autofocus: true,
+                controller: cardNametextEditingController,
                 decoration: InputDecoration(hintText: "Type the Name on Credit Card",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
                 ),
               ),
@@ -244,12 +249,12 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         else {
           showdialog("please wait", context);
           //add data to database api
-          saveData(userId,namecard,cardnumber,expiry,pin);
+          //saveData(userId,namecard,cardnumber,expiry,pin);
           booking();
           //end progress dialoge
           Navigator.pop(context);
           //move to clientmap page
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const ClientMap1()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
         }
         // _controller.nextPage(duration: _kDuration, curve: _kCurve);
       },
@@ -295,25 +300,27 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     ).show();
   }
 
-  booking(){
-    String? carModel,carMaker,carYear,uId,driver_id,pickupLocation, dropLocation, bookingtype, service,otime,odate;
-    double? pickuplat, pickuplong, dropLat, dropLong,amount;
-    int? wdType;
+  booking()async{
+    print("booking");
+    String? carModel,carMaker,carYear,uId,driver_id,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;
+    String? pickuplat, pickuplong, dropLat, dropLong;
+    String? wdType;
 
     carModel = Provider.of<AppData>(context,listen: false).carModelchosenValue;
     carMaker = Provider.of<AppData>(context,listen: false).carMakerchosenValue;
     carYear = Provider.of<AppData>(context,listen: false).carYear;
-    wdType = Provider.of<AppData>(context,listen: false).wdChooseValue;
+    wdType = Provider.of<AppData>(context,listen: false).wdChooseValue.toString();
     uId = Provider.of<AppData>(context,listen: false).uId;
     pickupLocation = Provider.of<AppData>(context,listen: false).pickupPlaceName;
     dropLocation = Provider.of<AppData>(context,listen: false).dropoffPlaceName;
     service = Provider.of<AppData>(context,listen: false).twoingService;
-    pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude;
-    pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude;
-    dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude;
-    dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude;
+    pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude.toString();
+    pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude.toString();
+    dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();
+    dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();
     bookingtype= Provider.of<AppData>(context,listen: false).twoingService;
-
+    amount = "100";
+    //wdType = "1";
     //get time and date
     int hour = DateTime.now().toLocal().hour - 12;int mint = DateTime.now().toLocal().minute;
     int year = DateTime.now().toLocal().year;int month = DateTime.now().toLocal().month;int day = DateTime.now().toLocal().day;
@@ -322,10 +329,24 @@ class _PaymentDetailsState extends State<PaymentDetails> {
       hour = hour +10;
     } otime = "$hour"+":"+"$mint";
 
-
+    print("booking api calling");
     //use booking api here
-   ApiServices.booking(carModel, carMaker, carYear, wdType, uId, driver_id, odate, otime, pickupLocation,
-       dropLocation, bookingtype, service, amount, pickuplat, pickuplong, dropLat, dropLong);
+   BookingResponse?  bookingResponse = await ApiServices.booking(carModel, carMaker, carYear, wdType, uId, driver_id, odate, otime, pickupLocation, dropLocation,
+       bookingtype, service, amount, pickuplat, pickuplong, dropLat, dropLong);
+
+  // print(bookingResponse!.userInfo!.driverId);
+
+   //save bookings into list
+   if(bookingResponse!.userInfo! !=null){
+     bookingList.add(bookingResponse.userInfo!);
+   }
+
+   //save booking data
+    bookingList.forEach((element) {
+      print("list show data");
+      print(element.pickUpLocation);
+    });
+
   }
 
   saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin)async{

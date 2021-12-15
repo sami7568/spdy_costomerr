@@ -161,8 +161,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   getNerOrderButton(),
                   const SizedBox(height: 15,),
-                  getMenuIcon(),
-                  getMenuText(),
+                  getMenuButton(),
                 ],
               ),
             ),
@@ -171,29 +170,27 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  getMenuIcon(){
+  
+  getMenuButton(){
     return GestureDetector(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) => const Menu()));
       },
-      child: Icon(
-        Icons.menu,
-        color: buttonPressBlueColor(),
-        size: 50,
-      ),
-    );
-  }
-  getMenuText(){
-    return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Menu()));
-      },
-      child: Text(
-        "Menu",
-        style: TextStyle(
+      child: Column(
+        children: [
+          Icon(
+            Icons.menu,
             color: buttonPressBlueColor(),
-            fontSize: 20,
-            fontWeight: FontWeight.bold),
+            size: 50,
+          ),
+          Text(
+            "Menu",
+            style: TextStyle(
+                color: buttonPressBlueColor(),
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          )
+        ],
       ),
     );
   }

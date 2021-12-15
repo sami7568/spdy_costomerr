@@ -85,9 +85,10 @@ class ApiServices{
   }
 
   //booking api
-  static Future<String?> booking(String? carModel,String? carMaker,String? carYear,int? wdType,String? uId,String? driver_id,
-      String? odate, String? otime, String? pickupLocation,String? dropLocation,String? bookingtype,String? service,double? amount,
-      double? pickuplat,double?pickuplong, double? dropLat,double? dropLong) async {
+  static Future<BookingResponse?> booking(String? carModel,String? carMaker,String? carYear,String? wdType,String? uId,String? driver_id,
+      String? odate, String? otime, String? pickupLocation,String? dropLocation,String? bookingtype,String? service,String? amount,
+      String? pickuplat,String?pickuplong, String? dropLat,String? dropLong) async {
+   // print("api calling9898");
 
     final response = await http.post(
       Uri.parse('https://spdytowtruck.com/admin-panel/api/User/booking'),
@@ -105,18 +106,20 @@ class ApiServices{
           "car_model":carModel,
           "car_year":carYear,
           "wd_type":wdType,
-          "pickup_Lat":pickuplat,
-          "pickup_Long":pickuplong,
-        "drop_Lat":dropLat,
-        "drop_Long":dropLong,
+          "pickup_lat":pickuplat,
+          "pickup_long":pickuplong,
+        "drop_lat":dropLat,
+        "drop_long":dropLong,
       },
     );
     try
     {
+     // print("api calling343");
+      //print(response.body);
       if(response.statusCode==200)
       {
         // ignore: avoid_print
-        print(response.body);
+       // print(response.body);
         var valueMap = json.decode(response.body);
         // ignore: avoid_print
         print("body ");
@@ -125,14 +128,14 @@ class ApiServices{
         print(bookingResponse.userInfo!.pickUpLocation);
         //save data in sharedpreferences here
 
-        return bookingResponse.msg;
+        return bookingResponse;
       }
       else{
-        return "failed";
+        return null;
       }
     }
     catch(exp){
-      return "failed";
+      return null;
     }
   }
 
@@ -455,32 +458,31 @@ class ApiServices{
     }
   }
 
-  // //allDrivers api
-  // static Future<dynamic?> allDrivers() async {
-  //   final response = await http.post(
-  //       Uri.parse('https://spdytowtruck.com/admin-panel/api/User/rating'),
-  //       body: {
-  //         "booking_id" :"1",
-  //         "rating_value":"4",
-  //         "user_id":"1"
-  //       }
-  //   );
-  //   print(response.body);
-  //   if(response.statusCode==200)
-  //   {
-  //     var valueMap = jsonDecode(response.body);
-  //     print("body ");
-  //     print(valueMap);
-  //     DriverRatingResponse driverRatingResponse  = DriverRatingResponse.fromJson(valueMap);
-  //     print(driverRatingResponse.userInfo!.driverRating);
-  //     return driverRatingResponse.msg;
-  //
-  //   }
-  //   else{
-  //     print ("failed");
-  //   }
-  // }
+  //allDrivers api
+  static Future<dynamic?> allDrivers() async {
+    final response = await http.post(
+        Uri.parse('https://spdytowtruck.com/admin-panel/api/User/rating'),
+        body: {
+          "booking_id" :"1",
+          "rating_value":"4",
+          "user_id":"1"
+        }
+    );
+    print(response.body);
+    if(response.statusCode==200)
+    {
+      var valueMap = jsonDecode(response.body);
+      print("body ");
+      print(valueMap);
+      DriverRatingResponse driverRatingResponse  = DriverRatingResponse.fromJson(valueMap);
+      print(driverRatingResponse.userInfo!.driverRating);
+      return driverRatingResponse.msg;
 
+    }
+    else{
+      print ("failed");
+    }
+  }
 }
 
 
