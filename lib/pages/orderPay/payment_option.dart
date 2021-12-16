@@ -16,7 +16,7 @@ class _PaymentOptionState extends State<PaymentOption> {
   Color cardColor = Colors.white;
   Color cardColor1 = Colors.white;
   Color cardColor2 = Colors.white;
-
+  String? cardType;
   @override
   Widget build(BuildContext context) {
     return body();
@@ -162,12 +162,24 @@ class _PaymentOptionState extends State<PaymentOption> {
 
         if(cardColor1 == Colors.white && cardColor == Colors.white && cardColor2 == Colors.white)
           {
+
             // ignore: avoid_print
             print("please select one");
             forwardalert();
             return;
           }
         else {
+          if(cardColor !=Colors.white )
+          {
+            cardType = "Credit Card";
+          }
+          if(cardColor !=Colors.white){
+            cardType = "Apple Pay";
+
+          }
+          if(cardColor !=Colors.white){
+            cardType = "Paypal";
+          }
           //save card
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const PaymentDetails()));

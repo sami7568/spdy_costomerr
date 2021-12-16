@@ -52,7 +52,8 @@ class _LoginState extends State<Login> {
                         const Text("Phone Number", style: TextStyle(fontSize: 15, color: Colors.white),),
                         TextField(
                           controller: phoneEditingController,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.number,
+                          autofocus: true,
                           decoration: const InputDecoration(
                               border: InputBorder.none,
                               filled: true,
@@ -69,7 +70,6 @@ class _LoginState extends State<Login> {
                         TextField(
                           controller: passEditingController,
                           obscureText: true,
-
                           keyboardType: TextInputType.visiblePassword,
                           decoration: const InputDecoration(
                               focusColor: Colors.black,

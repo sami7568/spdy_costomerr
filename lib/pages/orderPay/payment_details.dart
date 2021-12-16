@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:spdycustomers/Map/client_map1.dart';
 import 'package:spdycustomers/Model/JsonData/add_credit_card_response.dart';
+import 'package:spdycustomers/Model/JsonData/all_drivers.dart';
 import 'package:spdycustomers/Model/JsonData/booking_response.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 import 'package:spdycustomers/assistant/api_services.dart';
@@ -96,7 +97,6 @@ class _PaymentDetailsState extends State<PaymentDetails> {
               alignment: Alignment.centerLeft,
               child: TextField(
                 controller: cardNotextEditingController,
-                maxLength: 16,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(hintText: "Type the 16-Digit Number",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
                 ),
@@ -143,7 +143,6 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   //   });
                   // });
                 },
-                maxLength: 5,
                 keyboardType: TextInputType.datetime,
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 controller: cardExpirytextEditingController,
@@ -162,7 +161,6 @@ class _PaymentDetailsState extends State<PaymentDetails> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: TextField(
-                maxLength: 3,
                 keyboardType: TextInputType.number,
                 controller: cardpintextEditingController,
                 decoration: InputDecoration(hintText: "000",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
@@ -237,24 +235,29 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         if(cardnumber.isEmpty || expiry.isEmpty || pin.isEmpty || namecard.isEmpty){
           forwardalert("One or More Fields are Empty");
         }
-        else if(cardnumber.length <16){
+        else if(cardnumber.length !=16 ){
           forwardalert("Card number length is not valid");
         }
-        else if(expiry.length<4){
+        else if(expiry.length !=5){
           forwardalert("Please check Expiry Date");
         }
-        else if(pin.length<3){
+        else if(pin.length !=3){
           forwardalert("Card pin is not valid");
         }
         else {
           showdialog("please wait", context);
           //add data to database api
-          //saveData(userId,namecard,cardnumber,expiry,pin);
-          booking();
+          saveData(userId,namecard,cardnumber,expiry,pin);
+          String? res = booking();
           //end progress dialoge
           Navigator.pop(context);
-          //move to clientmap page
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+         if(res=="done"){
+           //move to clientmap page
+           Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+         }
+         else{
+
+         }
         }
         // _controller.nextPage(duration: _kDuration, curve: _kCurve);
       },
@@ -300,25 +303,18 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     ).show();
   }
 
-  booking()async{
+  dynamic booking()async{
     print("booking");
-    String? carModel,carMaker,carYear,uId,driver_id,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;
-    String? pickuplat, pickuplong, dropLat, dropLong;
-    String? wdType;
+    String? carModel,carMaker,carYear,uId,driver_id,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;String? pickuplat, pickuplong, dropLat, dropLong;String? wdType,twoing_weight;
 
-    carModel = Provider.of<AppData>(context,listen: false).carModelchosenValue;
-    carMaker = Provider.of<AppData>(context,listen: false).carMakerchosenValue;
-    carYear = Provider.of<AppData>(context,listen: false).carYear;
-    wdType = Provider.of<AppData>(context,listen: false).wdChooseValue.toString();
-    uId = Provider.of<AppData>(context,listen: false).uId;
-    pickupLocation = Provider.of<AppData>(context,listen: false).pickupPlaceName;
-    dropLocation = Provider.of<AppData>(context,listen: false).dropoffPlaceName;
-    service = Provider.of<AppData>(context,listen: false).twoingService;
-    pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude.toString();
-    pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude.toString();
-    dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();
-    dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();
-    bookingtype= Provider.of<AppData>(context,listen: false).twoingService;
+    carModel = Provider.of<AppData>(context,listen: false).carModelchosenValue;carMaker = Provider.of<AppData>(context,listen: false).carMakerchosenValue;
+    carYear = Provider.of<AppData>(context,listen: false).carYear;wdType = Provider.of<AppData>(context,listen: false).wdChooseValue.toString();
+    uId = Provider.of<AppData>(context,listen: false).uId;pickupLocation = Provider.of<AppData>(context,listen: false).pickupPlaceName;
+    dropLocation = Provider.of<AppData>(context,listen: false).dropoffPlaceName;service = Provider.of<AppData>(context,listen: false).twoingService;
+    pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude.toString();pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude.toString();
+    dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();
+    bookingtype= Provider.of<AppData>(context,listen: false).roadside_assistance;twoing_weight= Provider.of<AppData>(context,listen: false).chooseweight;
+
     amount = "100";
     //wdType = "1";
     //get time and date
@@ -329,27 +325,38 @@ class _PaymentDetailsState extends State<PaymentDetails> {
       hour = hour +10;
     } otime = "$hour"+":"+"$mint";
 
-    print("booking api calling");
-    //use booking api here
-   BookingResponse?  bookingResponse = await ApiServices.booking(carModel, carMaker, carYear, wdType, uId, driver_id, odate, otime, pickupLocation, dropLocation,
-       bookingtype, service, amount, pickuplat, pickuplong, dropLat, dropLong);
+    //first find a driver
+    AllDrivers? allDrivers = await ApiServices.allDrivers(bookingtype,twoing_weight);
+    if(allDrivers!.status == 200){
+      //use booking api here
+      BookingResponse?  bookingResponse = await ApiServices.booking(carModel, carMaker, carYear, wdType, uId, driver_id, odate, otime, pickupLocation, dropLocation,
+          bookingtype, service, amount, pickuplat, pickuplong, dropLat, dropLong);
+      // print(bookingResponse!.userInfo!.driverId);
 
-  // print(bookingResponse!.userInfo!.driverId);
-
-   //save bookings into list
-   if(bookingResponse!.userInfo! !=null){
-     bookingList.add(bookingResponse.userInfo!);
-   }
-
-   //save booking data
-    bookingList.forEach((element) {
-      print("list show data");
-      print(element.pickUpLocation);
-    });
+      //save bookings into list
+      if(bookingResponse!.userInfo! !=null){
+        bookingList.add(bookingResponse.userInfo!);
+      }
+      return "done";
+    }
+    else{
+      print("no driver ");
+      AwesomeDialog(
+          context: context,
+          title: "No Driver",
+          desc: "Currently No driver is available",
+          dialogType: DialogType.WARNING,
+          btnCancelOnPress: (){},
+          btnOkOnPress: (){
+            Navigator.pop(context);
+          }
+      ).show();      return "failed";
+    }
 
   }
 
-  saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin)async{
+  //save function
+  void saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin)async{
     AddCreditCardResponse? addCreditCardResponse = await ApiServices.addCreditCard(userId, cardName, cardnumber,expiry,pin );
     //save data locally
     UpdateData().updateCardInfo(addCreditCardResponse!.cardInfo!.cardNumber, addCreditCardResponse.cardInfo!.expiration,

@@ -19,7 +19,7 @@ class AppData extends ChangeNotifier{
   String twoingService="";
   
   //checking applicable booking step1
-  bool towingCheck = false;bool spareCheck = false;bool jumeCheck = false;bool outGasCheck = false;bool newBatteryCheck = false;
+  bool towingCheck = false;bool spareCheck = false;bool jumeCheck = false;bool outGasCheck = false;bool newBatteryCheck = false;String? roadside_assistance;
   //car info booking step2
   String? carMakerchosenValue, carModelchosenValue,carYear, chooseweight;int wdChooseValue=-1;
 
@@ -51,8 +51,9 @@ class AppData extends ChangeNotifier{
     notifyListeners();
   }
   //update check applicable booking step1
-  void updatecheckdata(bool towingCheck,bool spareCheck,bool jumeCheck,bool outGasCheck ,bool newBatteryCheck){
-   this.towingCheck=towingCheck;
+  void updatecheckdata(bool towingCheck,bool spareCheck,bool jumeCheck,bool outGasCheck ,bool newBatteryCheck,String? roadside_assistance){
+   this.roadside_assistance = roadside_assistance;
+    this.towingCheck=towingCheck;
    this.spareCheck = spareCheck;
    this.jumeCheck= jumeCheck;
    this.newBatteryCheck= newBatteryCheck;

@@ -30,8 +30,8 @@ class UpdateData{
 
   //update check applicable data booking step_1
   void updateCheckApplicable(bool towingCheck,bool spareCheck,bool jumeCheck,bool outGasCheck ,
-      bool newBatteryCheck,BuildContext context){
-    Provider.of<AppData>(context,listen: false).updatecheckdata(towingCheck, spareCheck, jumeCheck, outGasCheck, newBatteryCheck);
+      bool newBatteryCheck,String? roadside_assistance, BuildContext context){
+    Provider.of<AppData>(context,listen: false).updatecheckdata(towingCheck, spareCheck, jumeCheck, outGasCheck, newBatteryCheck,roadside_assistance);
   }
   //update carinfo booking step_2
   void updateCarInfo(String? carMakerchosenValue,String? carModelchosenValue,String? chooseweight,String? carYear,int wdChooseValue,BuildContext context){

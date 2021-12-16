@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spdycustomers/Model/JsonData/all_drivers.dart';
+import 'package:spdycustomers/assistant/api_services.dart';
 import 'package:spdycustomers/pages/Login/login.dart';
 import 'package:spdycustomers/pages/Registeration/acc_reg.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
@@ -68,12 +70,17 @@ class _WelcomeState extends State<Welcome> {
                     ),
                     const SizedBox(height: 30,),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         setState(() {
                           loginColor == Colors.white ?
                           loginColor = buttonPressBlueColor():
                           loginColor = Colors.white;
                         });
+
+                        //AllDrivers? allDrivers = await ApiServices.allDrivers();
+                        //print(allDrivers!.driverInfo!.driverId!);
+                        //print(allDrivers.driverInfo!.driverName);
+                        //print(allDrivers.driverInfo!.towWeight);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
                       },
                       child: Container(

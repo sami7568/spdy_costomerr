@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:spdycustomers/Model/JsonData/add_credit_card_response.dart';
+import 'package:spdycustomers/Model/JsonData/all_drivers.dart';
 import 'package:spdycustomers/Model/JsonData/booking_response.dart';
 import 'package:spdycustomers/Model/JsonData/delete_credit_card_respnse.dart';
 import 'package:spdycustomers/Model/JsonData/driver_rating_response.dart';
@@ -459,25 +460,23 @@ class ApiServices{
   }
 
   //allDrivers api
-  static Future<dynamic?> allDrivers() async {
+  static Future<AllDrivers?> allDrivers(String? bookingtype,String? twoing_weight) async {
     final response = await http.post(
-        Uri.parse('https://spdytowtruck.com/admin-panel/api/User/rating'),
-        body: {
-          "booking_id" :"1",
-          "rating_value":"4",
-          "user_id":"1"
-        }
+        Uri.parse('https://spdytowtruck.com/admin-panel/api/User/alldrivers'),
+      body: {
+          "two_weight":twoing_weight,
+          "roadside_assistance":bookingtype,
+      }
     );
     print(response.body);
     if(response.statusCode==200)
     {
-      var valueMap = jsonDecode(response.body);
-      print("body ");
-      print(valueMap);
-      DriverRatingResponse driverRatingResponse  = DriverRatingResponse.fromJson(valueMap);
-      print(driverRatingResponse.userInfo!.driverRating);
-      return driverRatingResponse.msg;
-
+     // var valueMap = jsonDecode(response.body);
+     // print("body ");
+     // print(valueMap);
+     // AllDrivers allDrivers  = AllDrivers.fromJson(valueMap);
+      //print(allDrivers.driverInfo!.driverId);
+     // return allDrivers;
     }
     else{
       print ("failed");
