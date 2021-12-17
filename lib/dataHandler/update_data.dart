@@ -56,4 +56,9 @@ class UpdateData{
     Provider.of<AppData>(context,listen: false).updateCardInfo(cardNo, cardexpiry, cardpin, NameCard,saveCardData);
   }
 
+  //update driver data
+  void updateDriverData(String? driverId, String? driverName,String? driverEmail,String? cellNumber,String? password,String? licenseNumber,String? licenseIssueDate, String? licenseExpirationDate,String? dateOfBirth,String? stateId,String? licenseTypeId,String? companyId,String? bankAccountHolder,String? bankAccountNumber, String? routingNumber,String? bankName,String? bankAddress,String? towTruckMakeId,String? towYear,String? towModelId,String? towTruckTypeId,String? towWeight,String? roadsideAssistance,String? lastSignin,String? signupDate,String? isApproved,String? loginStatus,String? isDeleted,BuildContext context){
+    Provider.of<AppData>(context,listen: false).updateDriverData(driverId, driverName, driverEmail, cellNumber, password, licenseNumber, licenseIssueDate, licenseExpirationDate, dateOfBirth, stateId, licenseTypeId, companyId, bankAccountHolder, bankAccountNumber, routingNumber, bankName, bankAddress, towTruckMakeId, towYear, towModelId, towTruckTypeId, towWeight, roadsideAssistance, lastSignin, signupDate, isApproved, loginStatus, isDeleted);
+  }
+
 }

@@ -97,6 +97,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
               alignment: Alignment.centerLeft,
               child: TextField(
                 controller: cardNotextEditingController,
+                maxLength: 16,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(hintText: "Type the 16-Digit Number",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
                 ),
@@ -248,17 +249,18 @@ class _PaymentDetailsState extends State<PaymentDetails> {
           showdialog("please wait", context);
           //add data to database api
           saveData(userId,namecard,cardnumber,expiry,pin);
-          String? res = booking();
-          //end progress dialoge
           Navigator.pop(context);
-         if(res=="done"){
+          booking();
+          //dynamic? res = booking();
+          //end progress dialoge
+         /*if(res=="done"){
            //move to clientmap page
            Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
          }
          else{
 
          }
-        }
+       */ }
         // _controller.nextPage(duration: _kDuration, curve: _kCurve);
       },
     );
@@ -273,7 +275,8 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         ],
       ),
       onPressed: () {
-        backalert();
+        findDriver();
+       // backalert();
         // _controller.previousPage(
         //     duration: _kDuration, curve: _kCurve);
       },
@@ -303,58 +306,74 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     ).show();
   }
 
-  dynamic booking()async{
+   booking()async{
     print("booking");
-    String? carModel,carMaker,carYear,uId,driver_id,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;String? pickuplat, pickuplong, dropLat, dropLong;String? wdType,twoing_weight;
-
-    carModel = Provider.of<AppData>(context,listen: false).carModelchosenValue;carMaker = Provider.of<AppData>(context,listen: false).carMakerchosenValue;
-    carYear = Provider.of<AppData>(context,listen: false).carYear;wdType = Provider.of<AppData>(context,listen: false).wdChooseValue.toString();
-    uId = Provider.of<AppData>(context,listen: false).uId;pickupLocation = Provider.of<AppData>(context,listen: false).pickupPlaceName;
-    dropLocation = Provider.of<AppData>(context,listen: false).dropoffPlaceName;service = Provider.of<AppData>(context,listen: false).twoingService;
-    pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude.toString();pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude.toString();
-    dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();
-    bookingtype= Provider.of<AppData>(context,listen: false).roadside_assistance;twoing_weight= Provider.of<AppData>(context,listen: false).chooseweight;
-
-    amount = "100";
     //wdType = "1";
     //get time and date
     int hour = DateTime.now().toLocal().hour - 12;int mint = DateTime.now().toLocal().minute;
     int year = DateTime.now().toLocal().year;int month = DateTime.now().toLocal().month;int day = DateTime.now().toLocal().day;
-    odate = "$year"+"/$month"+"/$day";
+    String? odate = "$year"+"/$month"+"/$day";
     if(hour<0){
       hour = hour +10;
-    } otime = "$hour"+":"+"$mint";
-
+    }
+    String? otime = "$hour"+":"+"$mint";
+    /*String res =*/ findDriver();
+    /*if(res == "yes"){
+      makeBooking();
+    }
+ */
+  }
+  findDriver()async{
+   // showdialog("Finding Driver", context);
     //first find a driver
-    AllDrivers? allDrivers = await ApiServices.allDrivers(bookingtype,twoing_weight);
-    if(allDrivers!.status == 200){
-      //use booking api here
-      BookingResponse?  bookingResponse = await ApiServices.booking(carModel, carMaker, carYear, wdType, uId, driver_id, odate, otime, pickupLocation, dropLocation,
-          bookingtype, service, amount, pickuplat, pickuplong, dropLat, dropLong);
-      // print(bookingResponse!.userInfo!.driverId);
-
-      //save bookings into list
-      if(bookingResponse!.userInfo! !=null){
-        bookingList.add(bookingResponse.userInfo!);
-      }
-      return "done";
+    await ApiServices.allDrivers();
+    // for (var element in driverInfo!) {
+    //   // ignore: avoid_print
+    //   print(element);
+    // }
+    //Navigator.pop(context);
+   /* if(allDrivers![0] == 200){
+      List<DriverInfo>? info = allDrivers.first.driverInfo;
+      info!.forEach((element) {
+        print(element.towWeight);
+      });
+      //save driver data
+     // UpdateData().updateDriverData(info!.driverId, info.driverName, info.driverEmail, info.cellNumber, info.password, info.licenseNumber, info.licenseIssueDate, info.licenseExpirationDate, info.dateOfBirth, info.stateId, info.licenseTypeId, info.companyId, info.bankAccountHolder, info.bankAccountNumber, info!.routingNumber, info.bankName, info.bankAddress, info.towTruckMakeId, info.towYear, info.towModelId, info.towTruckTypeId, info.towWeight, info!.roadsideAssistance, info.lastSignin, info.signupDate, info.isApproved, info.loginStatus, info.isDeleted, context);
+      return "yes";
     }
     else{
+      Navigator.pop(context);
       print("no driver ");
       AwesomeDialog(
           context: context,
           title: "No Driver",
-          desc: "Currently No driver is available",
+          desc: "Currently Driver is not available",
           dialogType: DialogType.WARNING,
           btnCancelOnPress: (){},
           btnOkOnPress: (){
             Navigator.pop(context);
           }
-      ).show();      return "failed";
+      ).show();
+      return "no";
     }
-
+*/
   }
+  makeBooking()async{
+    String? carModel,carMaker,carYear,uId,driver_id,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;String? pickuplat, pickuplong, dropLat, dropLong;String? wdType,twoing_weight;
+    carModel = Provider.of<AppData>(context,listen: false).carModelchosenValue;carMaker = Provider.of<AppData>(context,listen: false).carMakerchosenValue;carYear = Provider.of<AppData>(context,listen: false).carYear;wdType = Provider.of<AppData>(context,listen: false).wdChooseValue.toString();uId = Provider.of<AppData>(context,listen: false).uId;pickupLocation = Provider.of<AppData>(context,listen: false).pickupPlaceName;dropLocation = Provider.of<AppData>(context,listen: false).dropoffPlaceName;service = Provider.of<AppData>(context,listen: false).twoingService;pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude.toString();pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude.toString();dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();bookingtype= Provider.of<AppData>(context,listen: false).roadside_assistance;twoing_weight= Provider.of<AppData>(context,listen: false).chooseweight;
+    amount = "100";
 
+    showdialog("Booking Driver", context);
+    //use booking api here
+    BookingResponse?  bookingResponse = await ApiServices.booking(carModel, carMaker, carYear, wdType, uId, driver_id, odate, otime, pickupLocation, dropLocation, bookingtype, service, amount, pickuplat, pickuplong, dropLat, dropLong);
+    Navigator.pop(context);
+
+    //save bookings data into list
+    if(bookingResponse!.userInfo! !=null){
+      bookingList.add(bookingResponse.userInfo!);
+    }
+    return "done";
+  }
   //save function
   void saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin)async{
     AddCreditCardResponse? addCreditCardResponse = await ApiServices.addCreditCard(userId, cardName, cardnumber,expiry,pin );

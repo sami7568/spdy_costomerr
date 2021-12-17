@@ -361,7 +361,7 @@ class _CarInfoState extends State<CarInfo> {
         ],
       ),
       onPressed: () {
-        bool? twingcheck = Provider.of<AppData>(context,listen: false).towingCheck==true;
+        bool? twingcheck = Provider.of<AppData>(context,listen: false).towingCheck;
         //check all fields are selected
         if(_carMakerchosenValue==null || _carModelchosenValue==null || carInfoTextEditingController.text.isEmpty ||wdChooseValue==-1){
           // ignore: avoid_print

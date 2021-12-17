@@ -1,14 +1,17 @@
 class AllDrivers {
-  DriverInfo? driverInfo;
+  List<DriverInfo>? driverInfo;
   String? msg;
   int? status;
 
   AllDrivers({this.driverInfo, this.msg, this.status});
 
   AllDrivers.fromJson(Map<String, dynamic> json) {
-    driverInfo = json['driver_info'] != null
-        ? new DriverInfo.fromJson(json['driver_info'])
-        : null;
+    if (json['driver_info'] != null) {
+      driverInfo = <DriverInfo>[];
+      json['driver_info'].forEach((v) {
+        driverInfo!.add(DriverInfo.fromJson(v));
+      });
+    }
     msg = json['msg'];
     status = json['status'];
   }
@@ -16,7 +19,7 @@ class AllDrivers {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.driverInfo != null) {
-      data['driver_info'] = this.driverInfo!.toJson();
+      data['driver_info'] = driverInfo!.map((v) => v.toJson()).toList();
     }
     data['msg'] = this.msg;
     data['status'] = this.status;

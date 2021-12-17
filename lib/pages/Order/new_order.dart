@@ -23,7 +23,8 @@ class _NewOrderState extends State<NewOrder> {
   Color cardColor1 = Colors.white;
   Color cardColor2 = Colors.white;
   Color cardColor3 = Colors.white;
-  Color cardColor4 = Colors.white;        String? roadside_assistance;
+  Color cardColor4 = Colors.white;
+  String? roadside_assistance;
 
   @override
   Widget build(BuildContext context) {
@@ -129,70 +130,53 @@ class _NewOrderState extends State<NewOrder> {
         ],
       ),
       onPressed: () {
-        if (towingCheck == false &&
-            spareCheck == false &&
-            jumeCheck == false &&
-            outGasCheck == false &&
-            newBatteryCheck == false)
-        {
+        if (towingCheck == false && spareCheck == false && jumeCheck == false && outGasCheck == false && newBatteryCheck == false) {
           // ignore: avoid_print
           print("please select at least one of them");
           //dialogue
           dialogue();
           return;
         }
-        else{
-          if(towingCheck ==true ){
-            if(roadside_assistance==null){
-            roadside_assistance = "twoing";
-            }
-            else{
-              roadside_assistance = roadside_assistance! + ", twoing";
-
-            };
+        else {
+          if (towingCheck == true) {
+            roadside_assistance = "tow";
           }
-          if(spareCheck ==true ){
-            if(roadside_assistance==null){
-              roadside_assistance = "spare tire change";
+          if (spareCheck == true) {
+            if (roadside_assistance == null) {
+              roadside_assistance = "Spare tire";
+            } else {
+              roadside_assistance = roadside_assistance! + ", Spare tire";
             }
-            else{
-              roadside_assistance = roadside_assistance! + ", spare tire change";
-
-            };
+            ;
           }
-          if(jumeCheck ==true ){
-            if(roadside_assistance==null){
-              roadside_assistance = "jump start";
+          if (jumeCheck == true) {
+            if (roadside_assistance == null) {
+              roadside_assistance = "Jump start";
+            } else {
+              roadside_assistance = roadside_assistance! + ", Jump start";
             }
-            else{
-              roadside_assistance = roadside_assistance! + ", jump start";
-            };
           }
-          if(outGasCheck ==true ){
-            if(roadside_assistance==null){
-              roadside_assistance = "out of gas delivery";
+          if (outGasCheck == true) {
+            if (roadside_assistance == null) {
+              roadside_assistance = "fuel";
+            } else {
+              roadside_assistance = roadside_assistance! + ", fuel";
             }
-            else{
-              roadside_assistance = roadside_assistance! + ", out of gas delivery";
-
-            };
           }
-          if(newBatteryCheck ==true ){
-            if(roadside_assistance==null){
-              roadside_assistance = "new battery install";
+          if (newBatteryCheck == true) {
+            if (roadside_assistance == null) {
+              roadside_assistance = "battery";
+            } else {
+              roadside_assistance = roadside_assistance! + ", battery";
             }
-            else{
-              roadside_assistance = roadside_assistance! + ", new battery install";
-
-            };
           }
-
+          // ignore: avoid_print
           print(roadside_assistance);
+          UpdateData().updateCheckApplicable(towingCheck, spareCheck, jumeCheck,
+              outGasCheck, newBatteryCheck, roadside_assistance, context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const CarInfo()));
         }
-        UpdateData().updateCheckApplicable(towingCheck, spareCheck, jumeCheck,
-            outGasCheck, newBatteryCheck, roadside_assistance, context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const CarInfo()));
       },
     );
   }

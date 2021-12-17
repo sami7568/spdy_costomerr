@@ -14,6 +14,9 @@ import 'package:spdycustomers/Model/JsonData/signup_response.dart';
 import 'package:spdycustomers/Model/JsonData/user_booking_list_response.dart';
 import 'package:spdycustomers/Model/JsonData/user_credit_card_response.dart';
 import 'package:spdycustomers/Model/JsonData/user_data_response.dart';
+import 'package:spdycustomers/pages/Order/place_order.dart';
+
+import '../global_variables.dart';
 // user api services
 class ApiServices{
 
@@ -460,23 +463,72 @@ class ApiServices{
   }
 
   //allDrivers api
-  static Future<AllDrivers?> allDrivers(String? bookingtype,String? twoing_weight) async {
-    final response = await http.post(
+  static Future<List<DriverInfo>?> allDrivers() async {
+    final response = await http.get(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/alldrivers'),
-      body: {
-          "two_weight":twoing_weight,
-          "roadside_assistance":bookingtype,
-      }
     );
     print(response.body);
     if(response.statusCode==200)
     {
-     // var valueMap = jsonDecode(response.body);
-     // print("body ");
-     // print(valueMap);
-     // AllDrivers allDrivers  = AllDrivers.fromJson(valueMap);
-      //print(allDrivers.driverInfo!.driverId);
-     // return allDrivers;
+     var valueMap = jsonDecode(response.body);
+     print("body ");
+     print(valueMap);
+
+     AllDrivers? allDrivers  = AllDrivers.fromJson(valueMap);
+
+     print("\n\n\n");
+    List<String>? matchingIds = [];
+    int accuranceCount=0;
+     for (var services in orderList) {
+       for (var driverinfo in allDrivers.driverInfo!) {
+         print("checking driver ");
+         print(driverinfo.driverId);
+       List<String> roadAssistanceList = driverinfo.roadsideAssistance!.split(",");
+       roadAssistanceList.forEach((roadAss) {
+         if(services.toLowerCase().trim() == roadAss.toLowerCase().trim()){
+           String? id = driverinfo.driverId!;
+           matchingIds.add(id);
+           print("$id $roadAss\n");
+         }
+         else{
+           //print("no match");
+         }
+       });
+     }
+       print("\n\n\n\n\n ");
+     }
+     print("oder lenght");
+     print(orderList.length);
+
+     print("counting ");
+     List<String>? countList = [];
+     matchingIds.forEach((element) {
+       var foundElements = matchingIds.where((e) => e == element);
+       int a = foundElements.length;
+       if(a==orderList.length){
+         countList.add(element);
+         print("this is the driver id who is matching to you $element");
+       }
+//       print(foundElements.length);
+     });
+     print("distinct");
+     var distinct = countList.toSet().toList();
+     distinct.forEach((element) {
+       print(element);
+       bookingDriverIdList!.add(element);
+     });
+     // print("matching ids");
+     // matchingIds.forEach((element) {
+     //   print(element);
+     // });
+     // print(allDrivers.driverInfo!.first.towWeight!.split(","));
+     // List<String> list = allDrivers.driverInfo!.first.towWeight!.split(",");
+     // list.forEach((element) {
+     //   print(element.trim());
+     // });
+     // List<DriverInfo>? driverInfo = allDrivers.driverInfo;
+     // print(driverInfo!.length);
+     //return allDrivers.driverInfo;
     }
     else{
       print ("failed");

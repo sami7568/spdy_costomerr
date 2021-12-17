@@ -26,6 +26,23 @@ class AppData extends ChangeNotifier{
   //credit card no, credit, apple pay,
   String? cardNo; String? cardexpiry; String? cardpin; String? NameCard;bool? saveCardData;
 
+  //driver data
+  String? driverId;String? driverName;String? driverEmail;String? cellNumber;String? password;String? licenseNumber;String? licenseIssueDate;
+  String? licenseExpirationDate;String? dateOfBirth;String? stateId;String? licenseTypeId;String? companyId;String? bankAccountHolder;
+  String? bankAccountNumber;String? routingNumber;String? bankName;String? bankAddress;String? towTruckMakeId;String? towYear;String? towModelId;
+  String? towTruckTypeId;String? towWeight;String? roadsideAssistance;String? lastSignin;String? signupDate;String? isApproved;String? loginStatus;String? isDeleted;
+
+  //update driver data
+  void updateDriverData( String? driverId, String? driverName,String? driverEmail,String? cellNumber,String? password,String? licenseNumber,String? licenseIssueDate, String? licenseExpirationDate,String? dateOfBirth,String? stateId,String? licenseTypeId,String? companyId,String? bankAccountHolder,String? bankAccountNumber, String? routingNumber,String? bankName,String? bankAddress,String? towTruckMakeId,String? towYear,String? towModelId,String? towTruckTypeId,String? towWeight,String? roadsideAssistance,String? lastSignin,String? signupDate,String? isApproved,String? loginStatus,String? isDeleted){
+    this.driverId = driverId;this.driverName = driverName;this.driverEmail= driverEmail;this.cellNumber= cellNumber;this.password= password;
+    this.licenseNumber= licenseNumber;this.licenseIssueDate= licenseIssueDate;this.licenseExpirationDate= licenseExpirationDate;this.dateOfBirth= dateOfBirth;
+    this.stateId= stateId;this.licenseTypeId= licenseTypeId;this.companyId= companyId;this.bankAccountHolder= bankAccountHolder;this.bankAccountNumber= bankAccountNumber;
+    this.routingNumber= routingNumber;this.bankName= bankName;this.bankAddress= bankAddress;this.towTruckMakeId= towTruckMakeId;this.towYear= towYear;
+    this.towModelId= towModelId;this.towTruckTypeId= towTruckTypeId;this.towWeight= towWeight;this.roadsideAssistance= roadsideAssistance;
+    this.lastSignin= lastSignin;this.signupDate= signupDate;this.isApproved= isApproved;this.loginStatus= loginStatus;this.isDeleted= isDeleted;
+    notifyListeners();
+  }
+
   //update credit, apple pay, card data
   void updateCardInfo(String? cardNo, String? cardexpiry, String? cardpin, String? NameCard,bool? saveCardData){
     this.cardNo = cardNo;

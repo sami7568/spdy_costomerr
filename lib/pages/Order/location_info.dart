@@ -390,19 +390,19 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
     String  towingService = Provider.of<AppData>(context,listen: false).twoingService;
 
     if(battery){
-      orderList.add("New Battery Install");
+      orderList.add("batter");
     }
     if(towing){
-      orderList.add("$towingService towing");
+      orderList.add("tow");
     }
     if(outgas){
-      orderList.add("Out of Gas Delivery");
+      orderList.add("fuel");
     }
     if(jump){
-      orderList.add("JumpStart");
+      orderList.add("Jump start");
     }
     if(spare){
-      orderList.add("Spare Tire Change");
+      orderList.add("spare tire");
     }
     for (var element in orderList) {
       // ignore: avoid_print

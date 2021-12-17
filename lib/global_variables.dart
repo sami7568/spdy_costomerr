@@ -7,3 +7,4 @@ bool? pickupLocationSelected =false;
 bool? dropoffLocationSelected =false;
 
 List<UserInfo> bookingList = [];
+List<String>? bookingDriverIdList = [];
