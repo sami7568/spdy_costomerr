@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spdycustomers/Model/JsonData/user_booking_list_response.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
+import 'package:spdycustomers/assistant/api_services.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
 
 class CurrentOrders extends StatefulWidget {
   const CurrentOrders({Key? key}) : super(key: key);
@@ -12,11 +16,39 @@ class _CurrentOrdersState extends State<CurrentOrders> {
 
   Color backColorcanle = Colors.white;
   Color canceltextColor = buttonPressBlueColor();
+  List<Bookings>? currenBookings;
+  String? service ="0";
+  String? request,driverName;
+  @override
+  void initState() {
+    getCurrentOrder();
+    super.initState();
+  }
+  getCurrentOrder()async{
+    String? userId = Provider.of<AppData>(context,listen: false).uId;
+    String? bookingStatus = "Completed";
+    UserBookingListResponse? bookingResponse = await ApiServices.userBookingList(bookingStatus,userId);
+    if(bookingResponse == null){
+      setState(() {
+        service = "no";
+      });
+    }
+    else{
+    setState(() {
+        service  = bookingResponse.bookings!.first.service;
+        request = bookingResponse.bookings!.first.bookingType;
+        driverName = bookingResponse.bookings!.first.driverName;
+    });
+    List<Bookings> bookings = bookingResponse.bookings!;
+    setState(() {
+      currenBookings = bookings;
+    });
+  }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: avoid_print
-    print("build called");
+    //getCurrentOrder();
     return Scaffold(
       body: Container(
           height: MediaQuery.of(context).size.height,
@@ -33,7 +65,15 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                             fontSize: 23,
                             color: Colors.white,
                             fontWeight: FontWeight.bold)),
-                    Padding(
+                    service! =="0"
+                        ?const  Center(child:CircularProgressIndicator.adaptive(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ))
+                      : service=="no"? const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Text("You have no current orders.", style: TextStyle(fontSize: 17, color: Colors.white, )),
+                    )
+                          :Padding(
                       padding: const EdgeInsets.only(top: 50),
                       child: Container(
                         padding: const EdgeInsets.all(10),
@@ -55,20 +95,23 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const Align(
+                                 Align(
                                     alignment: Alignment.topLeft,
-                                    child: Text("ABC Towning",
-                                        style: TextStyle(
+                                    child: Text(
+                                        service.toString().isEmpty?"towing":service.toString(),
+                                        style:const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold))),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const Align(
+                                 Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                        "Request: Light Towing, New Battery Install",
-                                        style: TextStyle(
+                                      request.toString().isEmpty?"request":"Request : "+request.toString(),
+                                      /*  "Request: Light Towing, New Battery Install",
+                                      */
+                                        style: const TextStyle(
                                           fontSize: 15,
                                         ))),
                                 const SizedBox(
@@ -80,13 +123,15 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "Someone will see you in:",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1),
+                                       Expanded(
+                                         child: Text(
+                                          driverName.toString() +" will see you in:",
+                                          style:const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1),
                                       ),
+                                       ),
                                       Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
@@ -238,14 +283,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20))),
                   onTap: () {
-                    // ignore: avoid_print
-                    print("clicked");
-                    // setState(() {
-                    //   backColorcanle = buttonPressBlueColor();
-                    //   canceltextColor = Colors.white;
-                    // });
-
-                    dialog();
+                     dialog();
                   },
                 ),
               ],

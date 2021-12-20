@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spdycustomers/assistant/api_services.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
+import 'package:spdycustomers/dataHandler/update_data.dart';
+import 'package:spdycustomers/global_variables.dart';
 import 'package:spdycustomers/pages/AccountSetting/account_settings.dart';
 import 'package:spdycustomers/pages/AppSetting/app_settings.dart';
 import 'package:spdycustomers/pages/Login/login.dart';
@@ -6,6 +11,7 @@ import 'package:spdycustomers/pages/Menu/past_order.dart';
 import 'package:spdycustomers/pages/PaymentSetting/payment_setting.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
+import 'current_no_order.dart';
 import 'current_order.dart';
 
 class Menu extends StatefulWidget {
@@ -82,7 +88,12 @@ class _MenuState extends State<Menu> {
   }
   getMenuTile(String? title, String? desc, Widget? pageDirect){
     return GestureDetector(
-      onTap: (){
+      onTap: ()async{
+        if(pageDirect == Login()){
+          String? userId = Provider.of<AppData>(context,listen:false).uId;
+          await ApiServices.signout(userId);
+
+        }
         Navigator.push(context, MaterialPageRoute(builder: (context) => pageDirect!));
       },
       child: Card(

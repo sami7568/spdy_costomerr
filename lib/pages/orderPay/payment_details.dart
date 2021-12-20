@@ -14,6 +14,7 @@ import 'package:spdycustomers/assistant/api_services.dart';
 import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/pages/Menu/home_page.dart';
+import 'package:spdycustomers/pages/Order/place_order.dart';
 import 'package:spdycustomers/pages/Registeration/acc_reg.dart';
 
 import '../../global_variables.dart';
@@ -248,20 +249,11 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         else {
           showdialog("please wait", context);
           //add data to database api
-          saveData(userId,namecard,cardnumber,expiry,pin);
+         saveData(userId,namecard,cardnumber,expiry,pin);
           Navigator.pop(context);
-          booking();
-          //dynamic? res = booking();
-          //end progress dialoge
-         /*if(res=="done"){
-           //move to clientmap page
-           Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
-         }
-         else{
-
-         }
-       */ }
-        // _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          findDriver();
+      //         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+        }
       },
     );
   }
@@ -305,63 +297,81 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         }
     ).show();
   }
-
-   booking()async{
-    print("booking");
-    //wdType = "1";
-    //get time and date
-    int hour = DateTime.now().toLocal().hour - 12;int mint = DateTime.now().toLocal().minute;
-    int year = DateTime.now().toLocal().year;int month = DateTime.now().toLocal().month;int day = DateTime.now().toLocal().day;
-    String? odate = "$year"+"/$month"+"/$day";
-    if(hour<0){
-      hour = hour +10;
-    }
-    String? otime = "$hour"+":"+"$mint";
-    /*String res =*/ findDriver();
-    /*if(res == "yes"){
-      makeBooking();
-    }
- */
-  }
   findDriver()async{
    // showdialog("Finding Driver", context);
     //first find a driver
-    await ApiServices.allDrivers();
-    // for (var element in driverInfo!) {
-    //   // ignore: avoid_print
-    //   print(element);
-    // }
+   AllDrivers? allDrivers =  await ApiServices.allDrivers();
+   print("\n\n\n");
+   List<String>? matchingIds = [];
+   List<String>? driverNames = [];
+   for (var services in orderList) {
+     for (var driverinfo in allDrivers!.driverInfo!) {
+       List<String> roadAssistanceList = driverinfo.roadsideAssistance!.split(",");
+       for (var roadAss in roadAssistanceList) {
+         if(services.toLowerCase().trim() == roadAss.toLowerCase().trim()){
+           String? driverId = driverinfo.driverId!;
+           String? driverName = driverinfo.driverName;
+           matchingIds.add(driverId);
+           driverNames.add(driverName!);
+         }
+         else{
+
+           }
+       }
+     }
+   }
+   List<String>? countList = [];
+   matchingIds.forEach((element) {
+     var foundElements = matchingIds.where((e) => e == element);
+     int matchingidlength = foundElements.length;
+     if(matchingidlength==orderList.length){
+       countList.add(element);
+     }
+     else{
+       //dialogue
+     }
+   });
+   print("matching ids");
+   var distinct = countList.toSet().toList();
+   distinct.forEach((element) {
+     print(element);
+     bookingDriverIdList!.add(element);
+   });
+   int a=0;
+   if(bookingDriverIdList!.length!=null){
+     for (var element in bookingDriverIdList!) {
+       String? res = await makeBooking(element);
+       print("$a");
+       if(res=="done"){
+         forwardalert("have you book a driver");
+         // Navigate to other page
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+       }
+       a = a+1;
+       // ignore: avoid_print
+       print("make booking $element");
+     }
+   }
+   else{
+     // ignore: avoid_print
+     print("no driver found");
+     forwardalert("no driver found");
+   }
+   //makeBooking();
     //Navigator.pop(context);
-   /* if(allDrivers![0] == 200){
-      List<DriverInfo>? info = allDrivers.first.driverInfo;
-      info!.forEach((element) {
-        print(element.towWeight);
-      });
-      //save driver data
-     // UpdateData().updateDriverData(info!.driverId, info.driverName, info.driverEmail, info.cellNumber, info.password, info.licenseNumber, info.licenseIssueDate, info.licenseExpirationDate, info.dateOfBirth, info.stateId, info.licenseTypeId, info.companyId, info.bankAccountHolder, info.bankAccountNumber, info!.routingNumber, info.bankName, info.bankAddress, info.towTruckMakeId, info.towYear, info.towModelId, info.towTruckTypeId, info.towWeight, info!.roadsideAssistance, info.lastSignin, info.signupDate, info.isApproved, info.loginStatus, info.isDeleted, context);
-      return "yes";
-    }
-    else{
-      Navigator.pop(context);
-      print("no driver ");
-      AwesomeDialog(
-          context: context,
-          title: "No Driver",
-          desc: "Currently Driver is not available",
-          dialogType: DialogType.WARNING,
-          btnCancelOnPress: (){},
-          btnOkOnPress: (){
-            Navigator.pop(context);
-          }
-      ).show();
-      return "no";
-    }
-*/
   }
-  makeBooking()async{
-    String? carModel,carMaker,carYear,uId,driver_id,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;String? pickuplat, pickuplong, dropLat, dropLong;String? wdType,twoing_weight;
+  makeBooking(String? driver_id)async{
+    String? carModel,carMaker,carYear,uId,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;String? pickuplat, pickuplong, dropLat, dropLong;String? wdType,twoing_weight;
     carModel = Provider.of<AppData>(context,listen: false).carModelchosenValue;carMaker = Provider.of<AppData>(context,listen: false).carMakerchosenValue;carYear = Provider.of<AppData>(context,listen: false).carYear;wdType = Provider.of<AppData>(context,listen: false).wdChooseValue.toString();uId = Provider.of<AppData>(context,listen: false).uId;pickupLocation = Provider.of<AppData>(context,listen: false).pickupPlaceName;dropLocation = Provider.of<AppData>(context,listen: false).dropoffPlaceName;service = Provider.of<AppData>(context,listen: false).twoingService;pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude.toString();pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude.toString();dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();bookingtype= Provider.of<AppData>(context,listen: false).roadside_assistance;twoing_weight= Provider.of<AppData>(context,listen: false).chooseweight;
     amount = "100";
+    //get time and date
+    int hour = DateTime.now().toLocal().hour - 12;int mint = DateTime.now().toLocal().minute;
+    int year = DateTime.now().toLocal().year;int month = DateTime.now().toLocal().month;int day = DateTime.now().toLocal().day;
+    odate = "$year"+"/$month"+"/$day";
+    if(hour<0){
+      hour = hour +10;
+    }
+    otime = "$hour"+":"+"$mint";
 
     showdialog("Booking Driver", context);
     //use booking api here

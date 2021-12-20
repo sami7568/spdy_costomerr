@@ -118,20 +118,10 @@ class ApiServices{
     );
     try
     {
-     // print("api calling343");
-      //print(response.body);
       if(response.statusCode==200)
       {
-        // ignore: avoid_print
-       // print(response.body);
         var valueMap = json.decode(response.body);
-        // ignore: avoid_print
-        print("body ");
         BookingResponse bookingResponse = BookingResponse.fromJson(valueMap);
-        // ignore: avoid_print
-        print(bookingResponse.userInfo!.pickUpLocation);
-        //save data in sharedpreferences here
-
         return bookingResponse;
       }
       else{
@@ -201,11 +191,11 @@ class ApiServices{
   }
 
   //signout
-  static Future<String?> signout() async {
+  static Future<String?> signout(String? userId) async {
     final response = await http.post(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/signout'),
         body: {
-          "user_id" :"13",
+          "user_id" :userId,
         }
     );
     // ignore: avoid_print
@@ -397,33 +387,37 @@ class ApiServices{
 
   //user_booking_list specific
   // ignore: unnecessary_question_mark
-  static Future<dynamic?> userBookingList() async {
+  static Future<UserBookingListResponse?> userBookingList(String? bookingStatus, String?userId) async {
     final response = await http.post(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/user_booking_list'),
         body: {
-          "user_id" : "1",
-          "booking_status"  : "Completed",
+          "user_id" : userId,
+          "booking_status"  : bookingStatus,
         }
     );
     // ignore: avoid_print
     print(response.body);
     if(response.statusCode==200)
     {
-      // ignore: avoid_print
-      print("ok");
+      print(response.body[24]);
+      // ignore: unrelated_type_equality_checks
+      if(response.body[24]=="4"){
+        print("no data");
+        return null;
+      }
+      else{
      var valueMap = jsonDecode(response.body);
-     // ignore: avoid_print
      print("body ");
-     // ignore: avoid_print
      print(valueMap);
-     UserBookingListResponse userBookingListResponse = UserBookingListResponse.fromJson(valueMap);
-     // ignore: avoid_print
-     print(userBookingListResponse.bookings!.first);
-     for (var value in userBookingListResponse.bookings!) {
-       // ignore: avoid_print
-       print(value.driverRating);
+     if(valueMap == null){
+       print("value map is null");
      }
-     return userBookingListResponse.msg;
+     else{
+        UserBookingListResponse? userBookingListResponse = UserBookingListResponse.fromJson(valueMap);
+        return userBookingListResponse;
+      }
+     return null;
+    }
     }
     else{
       // ignore: avoid_print
@@ -463,72 +457,19 @@ class ApiServices{
   }
 
   //allDrivers api
-  static Future<List<DriverInfo>?> allDrivers() async {
+  static Future<AllDrivers?> allDrivers() async {
     final response = await http.get(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/alldrivers'),
     );
     print(response.body);
     if(response.statusCode==200)
     {
+
      var valueMap = jsonDecode(response.body);
      print("body ");
      print(valueMap);
-
      AllDrivers? allDrivers  = AllDrivers.fromJson(valueMap);
-
-     print("\n\n\n");
-    List<String>? matchingIds = [];
-    int accuranceCount=0;
-     for (var services in orderList) {
-       for (var driverinfo in allDrivers.driverInfo!) {
-         print("checking driver ");
-         print(driverinfo.driverId);
-       List<String> roadAssistanceList = driverinfo.roadsideAssistance!.split(",");
-       roadAssistanceList.forEach((roadAss) {
-         if(services.toLowerCase().trim() == roadAss.toLowerCase().trim()){
-           String? id = driverinfo.driverId!;
-           matchingIds.add(id);
-           print("$id $roadAss\n");
-         }
-         else{
-           //print("no match");
-         }
-       });
-     }
-       print("\n\n\n\n\n ");
-     }
-     print("oder lenght");
-     print(orderList.length);
-
-     print("counting ");
-     List<String>? countList = [];
-     matchingIds.forEach((element) {
-       var foundElements = matchingIds.where((e) => e == element);
-       int a = foundElements.length;
-       if(a==orderList.length){
-         countList.add(element);
-         print("this is the driver id who is matching to you $element");
-       }
-//       print(foundElements.length);
-     });
-     print("distinct");
-     var distinct = countList.toSet().toList();
-     distinct.forEach((element) {
-       print(element);
-       bookingDriverIdList!.add(element);
-     });
-     // print("matching ids");
-     // matchingIds.forEach((element) {
-     //   print(element);
-     // });
-     // print(allDrivers.driverInfo!.first.towWeight!.split(","));
-     // List<String> list = allDrivers.driverInfo!.first.towWeight!.split(",");
-     // list.forEach((element) {
-     //   print(element.trim());
-     // });
-     // List<DriverInfo>? driverInfo = allDrivers.driverInfo;
-     // print(driverInfo!.length);
-     //return allDrivers.driverInfo;
+    return allDrivers;
     }
     else{
       print ("failed");

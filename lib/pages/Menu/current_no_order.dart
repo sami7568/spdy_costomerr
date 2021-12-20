@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spdycustomers/Model/JsonData/booking_response.dart';
+import 'package:spdycustomers/Model/JsonData/user_booking_list_response.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
+import 'package:spdycustomers/assistant/api_services.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
+import 'package:spdycustomers/pages/Menu/home_page.dart';
+import 'package:spdycustomers/pages/Menu/menu.dart';
 
 class CurrentNoOrders extends StatefulWidget {
   const CurrentNoOrders({Key? key}) : super(key: key);
@@ -11,7 +18,6 @@ class CurrentNoOrders extends StatefulWidget {
 class _CurrentNoOrdersState extends State<CurrentNoOrders> {
 
   bool selected = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,25 +34,30 @@ class _CurrentNoOrdersState extends State<CurrentNoOrders> {
                   padding: EdgeInsets.only(top: 50),
                   child: Text("You have no current orders.", style: TextStyle(fontSize: 17, color: Colors.white, )),
                 ),
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                        size: 50,
-                      ),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                  },
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Icon(
+                          Icons.menu,
+                          color: Colors.white,
+                          size: 50,
+                        ),
 
-                      Text(
-                        "Menu",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
+                        Text(
+                          "Menu",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],

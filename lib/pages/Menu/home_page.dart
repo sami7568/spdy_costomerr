@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:spdycustomers/Model/JsonData/all_drivers.dart';
+import 'package:spdycustomers/assistant/api_services.dart';
 import 'package:spdycustomers/pages/Order/location_info.dart';
 import 'package:spdycustomers/pages/Order/new_order.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
@@ -61,12 +63,20 @@ class _HomePageState extends State<HomePage> {
   final double _originLatitude10=34.0128336;final double _originLongitude10=71.567465;
 
   Set<Marker> markerSet = {};
-
+  int? countdrivers=0;
   @override
   void initState() {
     markers.clear();
     addMarker();
+    getOnlineDrivers();
     super.initState();
+  }
+  getOnlineDrivers()async{
+    AllDrivers? allDrivers = await ApiServices.allDrivers();
+    print(allDrivers!.driverInfo!.length);
+    setState(() {
+      countdrivers = allDrivers.driverInfo!.length;
+    });
   }
 
   void addMarker(){
@@ -150,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                   color: backgroundColor(),
                   borderRadius: BorderRadius.circular(5)
               ),
-              child: const Text("There are 10 online providers nearby.", style: TextStyle(fontSize: 16, color: Colors.white,letterSpacing: 1),),),
+              child: Text("There are "+ countdrivers!.toString() +" online providers nearby.", style: TextStyle(fontSize: 16, color: Colors.white,letterSpacing: 1),),),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
