@@ -17,7 +17,8 @@ class _CurrentOrdersState extends State<CurrentOrders> {
   Color backColorcanle = Colors.white;
   Color canceltextColor = buttonPressBlueColor();
   List<Bookings>? currenBookings;
-  String? service ="0";
+  String? services ="0";
+  String? service;
   String? request,driverName;
   @override
   void initState() {
@@ -26,11 +27,11 @@ class _CurrentOrdersState extends State<CurrentOrders> {
   }
   getCurrentOrder()async{
     String? userId = Provider.of<AppData>(context,listen: false).uId;
-    String? bookingStatus = "Completed";
+    String? bookingStatus = "Inprogress";
     UserBookingListResponse? bookingResponse = await ApiServices.userBookingList(bookingStatus,userId);
     if(bookingResponse == null){
       setState(() {
-        service = "no";
+        services = "no";
       });
     }
     else{
@@ -65,11 +66,11 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                             fontSize: 23,
                             color: Colors.white,
                             fontWeight: FontWeight.bold)),
-                    service! =="0"
+                    services! =="0"
                         ?const  Center(child:CircularProgressIndicator.adaptive(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ))
-                      : service=="no"? const Padding(
+                      : services=="no"? const Padding(
                       padding: EdgeInsets.only(top: 50),
                       child: Text("You have no current orders.", style: TextStyle(fontSize: 17, color: Colors.white, )),
                     )

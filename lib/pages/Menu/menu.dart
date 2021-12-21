@@ -92,7 +92,6 @@ class _MenuState extends State<Menu> {
         if(pageDirect == Login()){
           String? userId = Provider.of<AppData>(context,listen:false).uId;
           await ApiServices.signout(userId);
-
         }
         Navigator.push(context, MaterialPageRoute(builder: (context) => pageDirect!));
       },

@@ -14,6 +14,7 @@ import 'package:spdycustomers/Model/JsonData/signup_response.dart';
 import 'package:spdycustomers/Model/JsonData/user_booking_list_response.dart';
 import 'package:spdycustomers/Model/JsonData/user_credit_card_response.dart';
 import 'package:spdycustomers/Model/JsonData/user_data_response.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/pages/Order/place_order.dart';
 
 import '../global_variables.dart';

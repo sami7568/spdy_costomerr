@@ -3,8 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/pages/Login/welcome.dart';
+import 'package:spdycustomers/pages/Menu/home_page.dart';
+import 'package:spdycustomers/prefdata.dart';
 
 import 'Widgets/colors.dart';
 
@@ -39,10 +42,42 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         //initialRoute:singkey==true? HomePage() :Welcome.idScreen,
         // ignore: unrelated_type_equality_checks
-        home:  const Welcome(),
+        home: const App(),
       ),
     );
   }
 }
 
+class App extends StatefulWidget {
+  const App({Key key}) : super(key: key);
 
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+
+  String siginkey="false";
+  @override
+  void initState() {
+    getSignin();
+    super.initState();
+  }
+  getSignin()async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+   String a = await pref.getString(Data.siginkey);
+   siginkey = a;
+    print(a);
+    // ignore: avoid_print
+    print(siginkey);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: /*siginkey == "true" ? */ const Welcome() /*: Welcome()*/,
+    );
+  }
+
+}

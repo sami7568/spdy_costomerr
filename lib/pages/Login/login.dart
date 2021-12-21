@@ -135,8 +135,6 @@ class _LoginState extends State<Login> {
           )),
     );
   }
-
-
     validate()async{
     // ignore: avoid_print
     print("validating");
@@ -160,22 +158,17 @@ class _LoginState extends State<Login> {
       return;
       }
       else {
-        showdialog("please wait", context);
+       // showdialog("please wait", context);
         LoginResponse res =  await ApiServices.loginUser(phone, password);
-       Navigator.pop(context);
+      //   Navigator.pop(context);
         if(res.status==200){
           //dialog
-          showdialog("please wait", context);
           //save provider data
           UpdateData().updateLoginData(res,context);
           makeFeildsEmpty();
           SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString(Data.siginkey!, "true");
 
-         String? a= pref.getString(Data.siginkey!);
-          // ignore: avoid_print
-          print(a!);
-          Navigator.pop(context);
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const HomePage()));
         }

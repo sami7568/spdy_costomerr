@@ -10,7 +10,6 @@ class Welcome extends StatefulWidget {
 static const String idScreen = "welcome";
 
   const Welcome({Key? key}) : super(key: key);
-
   @override
   _WelcomeState createState() => _WelcomeState();
 }

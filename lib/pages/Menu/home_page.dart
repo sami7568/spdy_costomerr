@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
 
   Set<Marker> markerSet = {};
   int? countdrivers=0;
+  Map<double,double> addressMap = {};
   @override
   void initState() {
     markers.clear();
@@ -76,6 +77,9 @@ class _HomePageState extends State<HomePage> {
     print(allDrivers!.driverInfo!.length);
     setState(() {
       countdrivers = allDrivers.driverInfo!.length;
+    });
+    allDrivers.driverInfo!.forEach((element) {
+   //   addressMap.keys(element.l)
     });
   }
 
