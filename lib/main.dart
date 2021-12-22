@@ -58,6 +58,8 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
 
   String siginkey="false";
+  String username = "null";
+
   @override
   void initState() {
     getSignin();
@@ -65,9 +67,17 @@ class _AppState extends State<App> {
   }
   getSignin()async{
     SharedPreferences pref = await SharedPreferences.getInstance();
-   String a = await pref.getString(Data.siginkey);
-   siginkey = a;
-    print(a);
+   String signin = await pref.getString(Data.siginkey);
+   String name = await pref.getString(Data.userName);
+   String userid=await pref.getString(Data.userId);
+   print(name);
+   setState(() {
+     siginkey = signin;
+     username = name;
+   });
+    print(signin);
+    print(userid);
+    print(name);
     // ignore: avoid_print
     print(siginkey);
   }
@@ -76,7 +86,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: /*siginkey == "true" ? */ const Welcome() /*: Welcome()*/,
+      home: siginkey=="true" ?  const HomePage() :const Welcome(),
     );
   }
 

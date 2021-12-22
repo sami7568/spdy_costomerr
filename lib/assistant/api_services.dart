@@ -93,7 +93,6 @@ class ApiServices{
   static Future<BookingResponse?> booking(String? carModel,String? carMaker,String? carYear,String? wdType,String? uId,String? driver_id,
       String? odate, String? otime, String? pickupLocation,String? dropLocation,String? bookingtype,String? service,String? amount,
       String? pickuplat,String?pickuplong, String? dropLat,String? dropLong) async {
-   // print("api calling9898");
 
     final response = await http.post(
       Uri.parse('https://spdytowtruck.com/admin-panel/api/User/booking'),
@@ -288,34 +287,21 @@ class ApiServices{
   }
 
   //user_credit_card
-  static Future<dynamic> userCreditCards() async {
+  static Future<UserCreditCardResponse?> userCreditCards(String? userId) async {
     final response = await http.post(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/user_credit_cards'),
         body: {
-          "user_id" :"33",
+          "user_id" :userId,
         }
     );
-    // ignore: avoid_print
     print(response.body);
     if(response.statusCode==200)
     {
       var valueMap = jsonDecode(response.body);
-      // ignore: avoid_print
-      print("body ");
-      // ignore: avoid_print
       print(valueMap);
       UserCreditCardResponse userCreditCardResponse = UserCreditCardResponse.fromJson(valueMap);
-      for (var element in userCreditCardResponse.cards!) {
-        // ignore: avoid_print
-        print("reg date");
-        // ignore: avoid_print
-        print(element.regDate);
-      }
-      for (var element in userCreditCardResponse.userInfo!.cards!) {
-        // ignore: avoid_print
-        print(element.regDate);
-      }
-      return userCreditCardResponse.status;
+
+      return userCreditCardResponse;
     }
     else{
       // ignore: avoid_print

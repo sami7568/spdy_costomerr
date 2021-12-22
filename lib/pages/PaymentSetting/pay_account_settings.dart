@@ -1,6 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spdycustomers/Model/JsonData/user_credit_card_response.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
+import 'package:spdycustomers/assistant/api_services.dart';
+import 'package:spdycustomers/prefdata.dart';
 
 import 'edit_credit_card.dart';
 
@@ -18,6 +22,18 @@ class _PayAccountSettingsState extends State<PayAccountSettings> {
 
   Icon crossIcon = Icon(Icons.highlight_off_outlined,color: buttonPressRedColor(),size: 40,);
   Icon tickIcon = Icon(Icons.check_circle_outline_outlined,color: greenColor(),size: 40,);
+
+  @override
+  void initState() {
+    getCardData();
+    super.initState();
+  }
+  getCardData()async{
+    SharedPreferences pref =await SharedPreferences.getInstance();
+    String? userId = await pref.getString(Data.userId!);
+    UserCreditCardResponse? apiServices =await ApiServices.userCreditCards(userId);
+    print(apiServices!.userInfo!.cards);
+  }
 
   @override
   Widget build(BuildContext context) {

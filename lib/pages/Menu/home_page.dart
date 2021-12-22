@@ -3,11 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spdycustomers/Model/JsonData/all_drivers.dart';
 import 'package:spdycustomers/assistant/api_services.dart';
+import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/pages/Order/location_info.dart';
 import 'package:spdycustomers/pages/Order/new_order.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
+import 'package:spdycustomers/prefdata.dart';
 
 import 'menu.dart';
 
@@ -73,6 +78,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
   getOnlineDrivers()async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? id =await pref.getString(Data.userId!);
+    Provider.of<AppData>(context,listen: false).updateuserId(id);
     AllDrivers? allDrivers = await ApiServices.allDrivers();
     print(allDrivers!.driverInfo!.length);
     setState(() {

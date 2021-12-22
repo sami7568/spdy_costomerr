@@ -42,7 +42,10 @@ class AppData extends ChangeNotifier{
     this.lastSignin= lastSignin;this.signupDate= signupDate;this.isApproved= isApproved;this.loginStatus= loginStatus;this.isDeleted= isDeleted;
     notifyListeners();
   }
-
+  void updateuserId(String? uId){
+    this.uId=uId;
+    notifyListeners();
+  }
   //update credit, apple pay, card data
   void updateCardInfo(String? cardNo, String? cardexpiry, String? cardpin, String? NameCard,bool? saveCardData){
     this.cardNo = cardNo;

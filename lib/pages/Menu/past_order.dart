@@ -26,14 +26,13 @@ List<Bookings>? pastBookings;
     String? bookingStatus = "Completed";
     UserBookingListResponse? bookingResponse = await ApiServices.userBookingList(bookingStatus,userId);
     if(bookingResponse == null){
+      print("noData");
       setState(() {
-        pastBookings = [];
         data = "no";
       });
     }else{
     if(bookingResponse.bookings!.isEmpty){
       print("empty");
-      data = "no data";
     }
     else{
     setState(() {
@@ -69,27 +68,55 @@ List<Bookings>? pastBookings;
                           color: Colors.white,
                           fontWeight: FontWeight.bold)),
                 ),
-                data=="0" ? const  Center(child:CircularProgressIndicator.adaptive(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),))
-                    :data=="no"? const Padding(
-                        padding: EdgeInsets.only(top: 50),
-                        child: Text("You have no past orders.", style: TextStyle(fontSize: 17, color: Colors.white, )),
-                      )
-                     :Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const History()));
-                                  // ignore: avoid_print
-                                  print("records");
-                                },
-                                child: ListView.builder(
-                                  padding: const EdgeInsets.all(8),
-                                  itemBuilder: (BuildContext context, int index) {
-                                   return cardss();
-                                 },
-                                itemCount: pastBookings!.length,)
-                                /*child: ListView(
+                data=="0"
+                  ? progressIndicator()
+                  : data=="no"
+                     ? noData()
+                     : bookings(),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Icon(
+                              Icons.menu,
+                              color: Colors.white,
+                              size: 50,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Menu",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+            ),
+          )),
+    );
+  }
+  bookings(){
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const History()));
+            // ignore: avoid_print
+            print("records");
+          },
+          child: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemBuilder: (BuildContext context, int index) {
+              return cardss();
+            },
+            itemCount: pastBookings!.length,)
+        /*child: ListView(
                                     children: <Widget>[
                                   cardss(),
                                   Card(
@@ -206,35 +233,20 @@ List<Bookings>? pastBookings;
                                   ),
                                   arrows(),
                                 ]),*/
-                              ),
-                      ),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Icon(
-                              Icons.menu,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Menu",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-            ),
-          )),
+      ),
     );
+  }
+  noData(){
+    return                 const Padding(
+      padding: EdgeInsets.only(top: 50),
+      child: Text("You have no past orders.", style: TextStyle(fontSize: 17, color: Colors.white, )),
+    )
+    ;
+  }
+  progressIndicator(){
+    return                 const  Center(child:CircularProgressIndicator.adaptive(
+      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),))
+    ;
   }
   cardss(){
     return Card(

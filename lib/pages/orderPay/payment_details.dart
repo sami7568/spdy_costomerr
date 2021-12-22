@@ -247,10 +247,11 @@ class _PaymentDetailsState extends State<PaymentDetails> {
           forwardalert("Card pin is not valid");
         }
         else {
-          showdialog("please wait", context);
+          //showdialog("please wait", context);
           //add data to database api
-         saveData(userId,namecard,cardnumber,expiry,pin);
-          Navigator.pop(context);
+         // ignore: await_only_futures
+         await saveData(userId,namecard,cardnumber,expiry,pin);
+         // Navigator.pop(context);
           findDriver();
       //         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
         }
@@ -368,15 +369,19 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     int hour = DateTime.now().toLocal().hour - 12;int mint = DateTime.now().toLocal().minute;
     int year = DateTime.now().toLocal().year;int month = DateTime.now().toLocal().month;int day = DateTime.now().toLocal().day;
     odate = "$year"+"/$month"+"/$day";
+
+    if(hour ==0){
+      hour = hour+1;
+    }
     if(hour<0){
       hour = hour +10;
     }
     otime = "$hour"+":"+"$mint";
 
-    showdialog("Booking Driver", context);
+   // showdialog("Booking Driver", context);
     //use booking api here
     BookingResponse?  bookingResponse = await ApiServices.booking(carModel, carMaker, carYear, wdType, uId, driver_id, odate, otime, pickupLocation, dropLocation, bookingtype, service, amount, pickuplat, pickuplong, dropLat, dropLong);
-    Navigator.pop(context);
+  //  Navigator.pop(context);
 
     //save bookings data into list
     if(bookingResponse!.userInfo! !=null){
@@ -385,7 +390,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     return "done";
   }
   //save function
-  void saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin)async{
+  saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin)async{
     AddCreditCardResponse? addCreditCardResponse = await ApiServices.addCreditCard(userId, cardName, cardnumber,expiry,pin );
     //save data locally
     UpdateData().updateCardInfo(addCreditCardResponse!.cardInfo!.cardNumber, addCreditCardResponse.cardInfo!.expiration,

@@ -92,7 +92,7 @@ class _LoginState extends State<Login> {
 
                     GestureDetector(
                       onTap: () async{
-                        validate();
+                        validateCredentials();
                       },
                       child: Center(
                         child: Container(
@@ -135,7 +135,8 @@ class _LoginState extends State<Login> {
           )),
     );
   }
-    validate()async{
+  
+  validateCredentials()async{
     // ignore: avoid_print
     print("validating");
     // if(!validateStructure(passEditingController.text)){
@@ -150,25 +151,30 @@ class _LoginState extends State<Login> {
     // Continue
     String phone= phoneEditingController.text;
     String password = passEditingController.text;
-
       if (phone.isEmpty || password.isEmpty ) {
         // ignore: avoid_print
         print("fill your data please");
+        //dialogue
         awesomedialog("Error","Please fill all the fields", context);
       return;
       }
       else {
        // showdialog("please wait", context);
         LoginResponse res =  await ApiServices.loginUser(phone, password);
-      //   Navigator.pop(context);
+//        Navigator.pop(context);
+  //      Navigator.pop(context);
+
         if(res.status==200){
-          //dialog
           //save provider data
           UpdateData().updateLoginData(res,context);
-          makeFeildsEmpty();
+          makeTextFeildsEmpty();
           SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setString(Data.siginkey!, "true");
-
+          await pref.setString(Data.siginkey!, "true");
+          await pref.setString(Data.userId!,res.userInfo!.userId!);
+          await pref.setString(Data.userName!, res.userInfo!.userName!);
+          await pref.setString(Data.signupemail!, res.userInfo!.email!);
+          String? name = await pref.getString(Data.userName!);
+          print(name);
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const HomePage()));
         }
@@ -180,7 +186,8 @@ class _LoginState extends State<Login> {
         }
     }
   }
-    makeFeildsEmpty(){
+
+  makeTextFeildsEmpty(){
     phoneEditingController.text = "";
     passEditingController.text = "";
   }

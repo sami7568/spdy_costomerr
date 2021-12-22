@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spdycustomers/assistant/api_services.dart';
 import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/dataHandler/update_data.dart';
@@ -7,9 +8,11 @@ import 'package:spdycustomers/global_variables.dart';
 import 'package:spdycustomers/pages/AccountSetting/account_settings.dart';
 import 'package:spdycustomers/pages/AppSetting/app_settings.dart';
 import 'package:spdycustomers/pages/Login/login.dart';
+import 'package:spdycustomers/pages/Login/welcome.dart';
 import 'package:spdycustomers/pages/Menu/past_order.dart';
 import 'package:spdycustomers/pages/PaymentSetting/payment_setting.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
+import 'package:spdycustomers/prefdata.dart';
 
 import 'current_no_order.dart';
 import 'current_order.dart';
@@ -53,7 +56,7 @@ class _MenuState extends State<Menu> {
           getMenuTile("Payment", 'Check an order that you are doing', const PaymentSetting()),
           getMenuTile("Account Settings", 'Edit your account information.', const AccountSettings()),
           getMenuTile("App Settings", 'Edit your app configurations.',const AppSettings()),
-          getMenuTile("Logout", 'Logout of this app', const Login()),
+          getMenuTile("Logout", 'Logout of this app', const Welcome()),
         ]);
   }
   getCancelButton(){
@@ -89,9 +92,14 @@ class _MenuState extends State<Menu> {
   getMenuTile(String? title, String? desc, Widget? pageDirect){
     return GestureDetector(
       onTap: ()async{
-        if(pageDirect == Login()){
+        if(pageDirect == Welcome()){
           String? userId = Provider.of<AppData>(context,listen:false).uId;
           await ApiServices.signout(userId);
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          await pref.setString(Data.siginkey!, "false");
+          await pref.setString(Data.userId!,"userid");
+          await pref.setString(Data.userName!, "username");
+          await pref.setString(Data.signupemail!, "email");
         }
         Navigator.push(context, MaterialPageRoute(builder: (context) => pageDirect!));
       },

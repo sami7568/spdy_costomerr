@@ -17,7 +17,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
   Color backColorcanle = Colors.white;
   Color canceltextColor = buttonPressBlueColor();
   List<Bookings>? currenBookings;
-  String? services ="0";
+  String? data = "0";
   String? service;
   String? request,driverName;
   @override
@@ -29,13 +29,15 @@ class _CurrentOrdersState extends State<CurrentOrders> {
     String? userId = Provider.of<AppData>(context,listen: false).uId;
     String? bookingStatus = "Inprogress";
     UserBookingListResponse? bookingResponse = await ApiServices.userBookingList(bookingStatus,userId);
+    print(bookingResponse!.bookings!.first.driverName);
     if(bookingResponse == null){
       setState(() {
-        services = "no";
+        data = "no";
       });
     }
     else{
     setState(() {
+      data = "data";
         service  = bookingResponse.bookings!.first.service;
         request = bookingResponse.bookings!.first.bookingType;
         driverName = bookingResponse.bookings!.first.driverName;
@@ -66,155 +68,13 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                             fontSize: 23,
                             color: Colors.white,
                             fontWeight: FontWeight.bold)),
-                    services! =="0"
-                        ?const  Center(child:CircularProgressIndicator.adaptive(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ))
-                      : services=="no"? const Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Text("You have no current orders.", style: TextStyle(fontSize: 17, color: Colors.white, )),
-                    )
-                          :Padding(
-                      padding: const EdgeInsets.only(top: 50),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        height: 300,
-                        width: 400,
-                        decoration: const BoxDecoration(color: Colors.white),
-                        child: Stack(
-                          children: [
-                            Column(
-                              children: [
-                                const Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "Order #123-ABC",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                 Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                        service.toString().isEmpty?"towing":service.toString(),
-                                        style:const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold))),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                 Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      request.toString().isEmpty?"request":"Request : "+request.toString(),
-                                      /*  "Request: Light Towing, New Battery Install",
-                                      */
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        ))),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                       Expanded(
-                                         child: Text(
-                                          driverName.toString() +" will see you in:",
-                                          style:const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 1),
-                                      ),
-                                       ),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(3),
-                                            color: orangeColor(),
-                                          ),
-                                          height: 30,
-                                          width: 90,
-                                          child: const Center(
-                                              child: Text(
-                                            "15:55",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          )))
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50.0),
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: greenColor(), width: 2)),
-                                      child: Center(
-                                          child: Text(
-                                        "Contact Provider",
-                                        style: TextStyle(
-                                            color: greenColor(),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      )),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(50.0),
-                                        color: buttonPressPurpleColor(),
-                                      ),
-                                      child: const Center(
-                                          child: Text(
-                                        "Show Map",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      )),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Positioned(
-                                top: 0, right: 0, child: Icon(Icons.more_vert)),
-                          ],
-                        ),
-                      ),
-                    ),
+                    data! =="0"
+                        ?
+                    progressIndi()
+                      : data =="no"?
+                      noData()
+                          :
+                    currentOrderData(),
                   ],
                 ),
               ),
@@ -249,7 +109,160 @@ class _CurrentOrdersState extends State<CurrentOrders> {
           )),
     );
   }
-
+  noData(){
+    return const Padding(
+      padding: EdgeInsets.only(top: 50),
+      child: Text("You have no current orders.", style: TextStyle(fontSize: 17, color: Colors.white, )),
+    );
+  }
+  currentOrderData(){
+    return  Padding(
+      padding: const EdgeInsets.only(top: 50),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        height: 300,
+        width: 400,
+        decoration: const BoxDecoration(color: Colors.white),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Order #123-ABC",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )),
+                const SizedBox(
+                  height: 10,
+                ),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                        service.toString().isEmpty?"towing":service.toString(),
+                        style:const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold))),
+                const SizedBox(
+                  height: 10,
+                ),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                        request.toString().isEmpty?"request":"Request : "+request.toString(),
+                        /*  "Request: Light Towing, New Battery Install",
+                                      */
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ))),
+                const SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          driverName.toString() +" will see you in:",
+                          style:const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ),
+                      Container(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.circular(3),
+                            color: orangeColor(),
+                          ),
+                          height: 30,
+                          width: 90,
+                          child: const Center(
+                              child: Text(
+                                "15:55",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              )))
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.circular(50.0),
+                          color: Colors.white,
+                          border: Border.all(
+                              color: greenColor(), width: 2)),
+                      child: Center(
+                          child: Text(
+                            "Contact Provider",
+                            style: TextStyle(
+                                color: greenColor(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          )),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(50.0),
+                        color: buttonPressPurpleColor(),
+                      ),
+                      child: const Center(
+                          child: Text(
+                            "Show Map",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          )),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Positioned(
+                top: 0, right: 0, child: Icon(Icons.more_vert)),
+          ],
+        ),
+      ),
+    );
+  }
+  progressIndi(){
+    return const  Center(child:CircularProgressIndicator.adaptive(
+      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+    ));
+  }
   void _settingModalBottomSheet(context) {
     showModalBottomSheet(
         context: context,
@@ -284,7 +297,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20))),
                   onTap: () {
-                     dialog();
+                     cancelOrderdialog();
                   },
                 ),
               ],
@@ -293,7 +306,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
         });
   }
 
-  void dialog() {
+  void cancelOrderdialog() {
     showDialog(
       builder: (BuildContext context) {
         return Dialog(
@@ -327,41 +340,51 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.0),
-                            color: buttonPressRedColor(),
-                            border: Border.all(
-                                color: buttonPressRedColor(), width: 2)),
-                        child: const Center(
-                            child: Text(
-                          "No, Keep my Order",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15),
-                        )),
+                      GestureDetector(
+                        onTap: (){
+
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: buttonPressRedColor(),
+                              border: Border.all(
+                                  color: buttonPressRedColor(), width: 2)),
+                          child: const Center(
+                              child: Text(
+                            "No, Keep my Order",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          )),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.0),
-                            color: greenColor(),
-                            border: Border.all(color: greenColor(), width: 2)),
-                        child: const Center(
-                            child: Text(
-                          "Yes, Cancel Order",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15),
-                        )),
+                      GestureDetector(
+                        onTap:(){
+                          //cancel order here
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: greenColor(),
+                              border: Border.all(color: greenColor(), width: 2)),
+                          child: const Center(
+                              child: Text(
+                            "Yes, Cancel Order",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          )),
+                        ),
                       ),
                     ],
                   ),
