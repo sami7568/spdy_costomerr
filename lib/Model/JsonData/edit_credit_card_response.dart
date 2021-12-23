@@ -29,14 +29,17 @@ class UserInfo {
   String? cardNumber;
   String? expiration;
   String? digitNumber;
+  String? nameOnCard;
 
-  UserInfo({this.cardName, this.cardNumber, this.expiration, this.digitNumber});
+
+  UserInfo({this.cardName, this.cardNumber, this.expiration, this.digitNumber,this.nameOnCard});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     cardName = json['card_name'];
     cardNumber = json['card_number'];
     expiration = json['expiration'];
     digitNumber = json['digit_number'];
+    nameOnCard  = json['name_on_card'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +48,7 @@ class UserInfo {
     data['card_number'] = cardNumber;
     data['expiration'] = expiration;
     data['digit_number'] = digitNumber;
+    data['name_on_card'] = nameOnCard;
     return data;
   }
 }

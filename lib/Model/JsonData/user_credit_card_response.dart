@@ -43,6 +43,7 @@ class Cards {
   String? regDate;
   String? isDeleted;
   String? expiration;
+  String? nameOnCard;
 
   Cards(
       {this.rowId,
@@ -52,7 +53,9 @@ class Cards {
         this.digitNumber,
         this.regDate,
         this.isDeleted,
-        this.expiration});
+        this.expiration,
+        this.nameOnCard,
+      });
 
   Cards.fromJson(Map<String, dynamic> json) {
     rowId = json['row_id'];
@@ -63,6 +66,7 @@ class Cards {
     regDate = json['reg_date'];
     isDeleted = json['is_deleted'];
     expiration = json['expiration'];
+    nameOnCard = json['name_on_card'];
   }
 
   Map<String, dynamic> toJson() {
@@ -75,6 +79,7 @@ class Cards {
     data['reg_date'] = regDate;
     data['is_deleted'] = isDeleted;
     data['expiration'] = expiration;
+    data['name_on_card'] = nameOnCard;
     return data;
   }
 }

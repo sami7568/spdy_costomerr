@@ -255,7 +255,7 @@ class ApiServices{
   //add_credit_card
   // ignore: unnecessary_question_mark
   static Future<AddCreditCardResponse?> addCreditCard(String? userId,String? cardName, String? cardNumber, String? expiration,
-      String? digitNumber) async {
+      String? digitNumber,String? nameOnCard) async {
     final response = await http.post(
         Uri.parse('https://spdytowtruck.com/admin-panel/api/User/add_credit_card'),
         body: {
@@ -264,6 +264,7 @@ class ApiServices{
           "card_number":cardNumber,
           "expiration":expiration,
           "digit_number":digitNumber,
+          "name_on_card":nameOnCard
         }
     );
     // ignore: avoid_print

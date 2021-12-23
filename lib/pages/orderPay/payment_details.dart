@@ -15,13 +15,12 @@ import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/pages/Menu/home_page.dart';
 import 'package:spdycustomers/pages/Order/place_order.dart';
-import 'package:spdycustomers/pages/Registeration/acc_reg.dart';
 
 import '../../global_variables.dart';
 
 class PaymentDetails extends StatefulWidget {
-  const PaymentDetails({Key? key, this.cardName}) : super(key: key);
-  final String? cardName;
+   PaymentDetails({Key? key, this.nameOnCard}) : super(key: key);
+   String? nameOnCard;
   @override
   _PaymentDetailsState createState() => _PaymentDetailsState();
 }
@@ -233,6 +232,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         String? expiry = cardExpirytextEditingController.text;
         String? pin = cardpintextEditingController.text;
         String? namecard = cardNametextEditingController.text;
+        String? nameOnCard = widget.nameOnCard;
         String? userId = Provider.of<AppData>(context,listen: false).uId;
         if(cardnumber.isEmpty || expiry.isEmpty || pin.isEmpty || namecard.isEmpty){
           forwardalert("One or More Fields are Empty");
@@ -250,7 +250,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
           //showdialog("please wait", context);
           //add data to database api
          // ignore: await_only_futures
-         await saveData(userId,namecard,cardnumber,expiry,pin);
+         await saveData(userId,namecard,cardnumber,expiry,pin,nameOnCard);
          // Navigator.pop(context);
           findDriver();
       //         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
@@ -364,6 +364,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
   makeBooking(String? driver_id)async{
     String? carModel,carMaker,carYear,uId,pickupLocation, dropLocation, bookingtype, service,otime,odate,amount;String? pickuplat, pickuplong, dropLat, dropLong;String? wdType,twoing_weight;
     carModel = Provider.of<AppData>(context,listen: false).carModelchosenValue;carMaker = Provider.of<AppData>(context,listen: false).carMakerchosenValue;carYear = Provider.of<AppData>(context,listen: false).carYear;wdType = Provider.of<AppData>(context,listen: false).wdChooseValue.toString();uId = Provider.of<AppData>(context,listen: false).uId;pickupLocation = Provider.of<AppData>(context,listen: false).pickupPlaceName;dropLocation = Provider.of<AppData>(context,listen: false).dropoffPlaceName;service = Provider.of<AppData>(context,listen: false).twoingService;pickuplat = Provider.of<AppData>(context,listen: false).pickupLatitude.toString();pickuplong = Provider.of<AppData>(context,listen: false).pickupLongitude.toString();dropLat = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();dropLong = Provider.of<AppData>(context,listen: false).dropoffLatitude.toString();bookingtype= Provider.of<AppData>(context,listen: false).roadside_assistance;twoing_weight= Provider.of<AppData>(context,listen: false).chooseweight;
+    
     amount = "100";
     //get time and date
     int hour = DateTime.now().toLocal().hour - 12;int mint = DateTime.now().toLocal().minute;
@@ -390,8 +391,8 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     return "done";
   }
   //save function
-  saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin)async{
-    AddCreditCardResponse? addCreditCardResponse = await ApiServices.addCreditCard(userId, cardName, cardnumber,expiry,pin );
+  saveData(String? userId,String? cardName, String? cardnumber, String? expiry,String? pin,String? nameOnCard)async{
+    AddCreditCardResponse? addCreditCardResponse = await ApiServices.addCreditCard(userId, cardName, cardnumber,expiry,pin,nameOnCard);
     //save data locally
     UpdateData().updateCardInfo(addCreditCardResponse!.cardInfo!.cardNumber, addCreditCardResponse.cardInfo!.expiration,
         addCreditCardResponse.cardInfo!.digitNumber, addCreditCardResponse.cardInfo!.cardName,_isChecked, context);

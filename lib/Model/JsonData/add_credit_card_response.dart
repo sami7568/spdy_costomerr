@@ -27,6 +27,7 @@ class AddCreditCardResponse {
 class CardInfo {
   String? userId;
   String? cardName;
+  String? nameOnCard;
   String? cardNumber;
   String? expiration;
   int? isDeleted;
@@ -40,7 +41,9 @@ class CardInfo {
         this.expiration,
         this.isDeleted,
         this.digitNumber,
-        this.regDate});
+        this.regDate,
+        this.nameOnCard
+      });
 
   CardInfo.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
@@ -50,6 +53,7 @@ class CardInfo {
     isDeleted = json['is_deleted'];
     digitNumber = json['digit_number'];
     regDate = json['reg_date'];
+    nameOnCard = json['name_on_card'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +65,7 @@ class CardInfo {
     data['is_deleted'] = isDeleted;
     data['digit_number'] = digitNumber;
     data['reg_date'] = regDate;
+    data['name_on_card'] =nameOnCard;
     return data;
   }
 }

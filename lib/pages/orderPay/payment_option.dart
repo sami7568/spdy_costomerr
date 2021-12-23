@@ -171,18 +171,23 @@ class _PaymentOptionState extends State<PaymentOption> {
         else {
           if(cardColor !=Colors.white )
           {
-            cardType = "Credit Card";
+            setState(() {
+              cardType = "Credit Card";
+            });
           }
           if(cardColor !=Colors.white){
-            cardType = "Apple Pay";
-
+            setState(() {
+              cardType = "Apple Pay";
+            });
           }
           if(cardColor !=Colors.white){
-            cardType = "Paypal";
+            setState(() {
+              cardType = "Paypal";
+            });
           }
           //save card
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const PaymentDetails()));
+              MaterialPageRoute(builder: (context) => PaymentDetails(nameOnCard: cardType,)));
         }
         // _controller.nextPage(duration: _kDuration, curve: _kCurve);
       },
