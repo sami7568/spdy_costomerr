@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:spdycustomers/Map/client_map1.dart';
 import 'package:spdycustomers/Model/JsonData/add_credit_card_response.dart';
@@ -247,7 +248,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
           forwardalert("Card pin is not valid");
         }
         else {
-          //showdialog("please wait", context);
+         // showdialog("please wait", context);
           //add data to database api
          // ignore: await_only_futures
          await saveData(userId,namecard,cardnumber,expiry,pin,nameOnCard);
@@ -268,8 +269,8 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         ],
       ),
       onPressed: () {
-        findDriver();
-       // backalert();
+       // findDriver();
+        backalert();
         // _controller.previousPage(
         //     duration: _kDuration, curve: _kCurve);
       },
@@ -299,7 +300,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     ).show();
   }
   findDriver()async{
-   // showdialog("Finding Driver", context);
+    //showDialog("Finding Driver", context);
     //first find a driver
    AllDrivers? allDrivers =  await ApiServices.allDrivers();
    print("\n\n\n");
@@ -343,14 +344,18 @@ class _PaymentDetailsState extends State<PaymentDetails> {
      for (var element in bookingDriverIdList!) {
        String? res = await makeBooking(element);
        print("$a");
-       if(res=="done"){
+       if (res == "done") {
+         Fluttertoast.showToast(msg: "U have Book A Driver");
          forwardalert("have you book a driver");
          // Navigate to other page
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+         Navigator.push(context,
+             MaterialPageRoute(builder: (context) => const HomePage()));
        }
-       a = a+1;
+       else {
+       a = a + 1;
        // ignore: avoid_print
        print("make booking $element");
+      }
      }
    }
    else{

@@ -328,18 +328,15 @@ class _LocationInfoState extends State<LocationInfo> with TickerProviderStateMix
   void getPolyline() async {
     List<LatLng> polylineCoordinates = [];
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "AIzaSyA5QBupZfYDYDMVGNOC53nGAF7K5FuDa1I",
+     mapKey,
       PointLatLng(Provider.of<AppData>(context,listen:false).pickupLatitude,
           Provider.of<AppData>(context,listen:false).pickupLongitude),
       PointLatLng(Provider.of<AppData>(context,listen:false).dropoffLatitude,
           Provider.of<AppData>(context,listen:false).dropoffLongitude),
       travelMode: TravelMode.driving,
     );
-    // ignore: avoid_print
-    print("getting poly");
     if (result.points.isNotEmpty) {
       // ignore: avoid_print
-      print("ponint not empty");
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }

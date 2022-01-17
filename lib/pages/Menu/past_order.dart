@@ -6,6 +6,8 @@ import 'package:spdycustomers/dataHandler/app_data.dart';
 import 'package:spdycustomers/pages/Menu/history.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 
+import 'menu.dart';
+
 class PastOrders extends StatefulWidget {
   const PastOrders({Key? key}) : super(key: key);
   @override
@@ -23,7 +25,7 @@ List<Bookings>? pastBookings;
   }
   getCurrentOrder()async{
     String? userId = Provider.of<AppData>(context,listen: false).uId;
-    String? bookingStatus = "Completed";
+    String? bookingStatus = "Inprogress";
     UserBookingListResponse? bookingResponse = await ApiServices.userBookingList(bookingStatus,userId);
     if(bookingResponse == null){
       print("noData");
@@ -68,35 +70,18 @@ List<Bookings>? pastBookings;
                           color: Colors.white,
                           fontWeight: FontWeight.bold)),
                 ),
-                data=="0"
-                  ? progressIndicator()
-                  : data=="no"
-                     ? noData()
-                     : bookings(),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Icon(
-                              Icons.menu,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Menu",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                data=="0" ? progressIndicator() : data=="no" ? noData() : bookings(),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: menuButton(),
+                  ),
+                ),
+              ],
+
             ),
           )),
     );
@@ -332,24 +317,22 @@ List<Bookings>? pastBookings;
       ],
     );
   }
-  menuButton() async {
-    return Container(
-      alignment: Alignment.bottomCenter,
+  menuButton(){
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Menu()));
+      },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: const [
           Icon(
             Icons.menu,
-            color: Colors.white,
+            color: Colors.black,
             size: 50,
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
+           Text(
             "Menu",
             style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
           )
@@ -357,4 +340,5 @@ List<Bookings>? pastBookings;
       ),
     );
   }
+
 }

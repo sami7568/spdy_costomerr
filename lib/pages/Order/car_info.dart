@@ -49,26 +49,26 @@ class _CarInfoState extends State<CarInfo> {
   }
   getFields(){
     return  Padding(
-      padding: const EdgeInsets.only(left: 30, top: 50, right: 30),
+      padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text("Car Information", style:
           TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20,),
+          //const SizedBox(height: 20,),
           const Text("Car Maker", style: TextStyle(fontSize: 17, color: Colors.white, )),
-          const SizedBox(height: 1,),
+         // const SizedBox(height: 1,),
           getCarMaker(),
-          const SizedBox(height: 5,),
+         // const SizedBox(height: 5,),
           const Text("Car Model", style: TextStyle(fontSize: 17, color: Colors.white, )),
-          const SizedBox(height: 1,),
+          //const SizedBox(height: 1,),
           getCarModel(),
-          const SizedBox(height: 5,),
+          //const SizedBox(height: 5,),
           const Text("Car year", style: TextStyle(fontSize: 17, color: Colors.white, )),
-          const SizedBox(height: 1,),
+         // const SizedBox(height: 1,),
           getCarYear(),
           getDtype(),
-          const SizedBox(height: 5,),
+         // const SizedBox(height: 5,),
           Provider.of<AppData>(context,listen: false).towingCheck==true? getWeightType() :Container(),
         ],
       ),
@@ -118,108 +118,116 @@ class _CarInfoState extends State<CarInfo> {
     return Column(
       children: [
         const Text("Choose Tow Weight", style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 10,),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              if(cardColor == Colors.white ){
-                cardColor = buttonPressBlueColor();
-                cardColor1 = Colors.white;
-                cardColor2 = Colors.white;
-                chooseweight = "Light Weight";
-              }
-              else{
-                cardColor = Colors.white;
-              }
-            });
-          },
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            height: 80,
-            decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(5),
+        //const SizedBox(height: 6,),
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if(cardColor == Colors.white ){
+                      cardColor = buttonPressBlueColor();
+                      cardColor1 = Colors.white;
+                      cardColor2 = Colors.white;
+                      chooseweight = "Light Weight";
+                    }
+                    else{
+                      cardColor = Colors.white;
+                    }
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                 // height: 80,
+                  decoration: BoxDecoration(
+                      color: cardColor,
+                      borderRadius: BorderRadius.circular(5),
 
-                border: Border.all(color: buttonPressBlueColor())
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Light Weight", style: TextStyle(color: cardColor == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(),fontWeight: FontWeight.bold, fontSize: 20),),
-                Text("Sedans, SUVs, Vans, Pick-Up Trucks, Mini-Vans, Motocycles, small trailers.", style: TextStyle(color: cardColor == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(), fontSize: 12)),
-              ],
-            ),
+                      border: Border.all(color: buttonPressBlueColor())
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Light Weight", style: TextStyle(color: cardColor == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(),fontWeight: FontWeight.bold, fontSize: 20),),
+                      Text("Sedans, SUVs, Vans, Pick-Up Trucks, Mini-Vans, Motocycles, small trailers.", style: TextStyle(color: cardColor == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(), fontSize: 12)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 2,),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if(cardColor1 == Colors.white ){
+                      cardColor1 = buttonPressBlueColor();
+                      cardColor2 = Colors.white;
+                      cardColor = Colors.white;
+                      chooseweight = "Medium Weight";
+                    }
+                    else{
+                      cardColor1 = Colors.white;
+                    }
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                 // height: 90,
+                  decoration: BoxDecoration(
+                      color: cardColor1,
+                      borderRadius: BorderRadius.circular(5),
+
+                      border: Border.all(color: buttonPressBlueColor())
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Medium Weight", style: TextStyle(color: cardColor1 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(),fontWeight: FontWeight.bold, fontSize: 20),),
+                      Text("Food trucks, Class C Motor Homes, 1-Ton Vehicles, Buses, Shuttles, Utility trucks, Large Ball Hitch Trailers.", style: TextStyle(color: cardColor1 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(), fontSize: 12)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 2,),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if(cardColor2 == Colors.white){
+                      cardColor2 = buttonPressBlueColor();
+                      cardColor = Colors.white;
+                      cardColor1 = Colors.white;
+                      chooseweight = "Heavy Weight";
+                    }
+                    else{
+                      cardColor2 = Colors.white;
+                    }
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  //height: 90,
+                  decoration: BoxDecoration(
+                      color: cardColor2,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: buttonPressBlueColor())
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Heavy Duty", style: TextStyle(color: cardColor2 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(),fontWeight: FontWeight.bold, fontSize: 20),),
+                      Text("Cement trucks, Cranes, Heavy Equipment transport, Semi, Tractor trailers, Tankers, 5th Wheel trailers.", style: TextStyle(color: cardColor2 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(), fontSize: 12)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 5,),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              if(cardColor1 == Colors.white ){
-                cardColor1 = buttonPressBlueColor();
-                cardColor2 = Colors.white;
-                cardColor = Colors.white;
-                chooseweight = "Medium Weight";
-              }
-              else{
-                cardColor1 = Colors.white;
-              }
-            });
-          },
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            height: 80,
-            decoration: BoxDecoration(
-                color: cardColor1,
-                borderRadius: BorderRadius.circular(5),
 
-                border: Border.all(color: buttonPressBlueColor())
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Medium Weight", style: TextStyle(color: cardColor1 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(),fontWeight: FontWeight.bold, fontSize: 20),),
-                Text("Food trucks, Class C Motor Homes, 1-Ton Vehicles, Buses, Shuttles, Utility trucks, Large Ball Hitch Trailers.", style: TextStyle(color: cardColor1 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(), fontSize: 12)),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 5,),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              if(cardColor2 == Colors.white){
-                cardColor2 = buttonPressBlueColor();
-                cardColor = Colors.white;
-                cardColor1 = Colors.white;
-                chooseweight = "Heavy Weight";
-              }
-              else{
-                cardColor2 = Colors.white;
-              }
-            });
-          },
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            height: 80,
-            decoration: BoxDecoration(
-                color: cardColor2,
-                borderRadius: BorderRadius.circular(5),
-
-                border: Border.all(color: buttonPressBlueColor())
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Heavy Duty", style: TextStyle(color: cardColor2 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(),fontWeight: FontWeight.bold, fontSize: 20),),
-                Text("Cement trucks, Cranes, Heavy Equipment transport, Semi, Tractor trailers, Tankers, 5th Wheel trailers.", style: TextStyle(color: cardColor2 == buttonPressBlueColor()? Colors.white : buttonPressBlueColor(), fontSize: 12)),
-              ],
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -334,7 +342,7 @@ class _CarInfoState extends State<CarInfo> {
   }
   getNavi(){
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 4),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Row(

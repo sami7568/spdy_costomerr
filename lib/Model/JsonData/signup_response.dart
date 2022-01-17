@@ -1,30 +1,31 @@
 class SignupResponse {
-  SignupUserInfo? signupuserInfo;
+  SignUserInfo? userInfo;
   String? msg;
   int? status;
 
-  SignupResponse({this.signupuserInfo, this.msg, this.status});
+  SignupResponse({this.userInfo, this.msg, this.status});
 
   SignupResponse.fromJson(Map<String, dynamic> json) {
-    signupuserInfo = json['user_info'] != null
-        ? SignupUserInfo.fromJson(json['user_info'])
+    userInfo = json['user_info'] != null
+        ? new SignUserInfo.fromJson(json['user_info'])
         : null;
     msg = json['msg'];
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (signupuserInfo != null) {
-      data['user_info'] = signupuserInfo!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.userInfo != null) {
+      data['user_info'] = this.userInfo!.toJson();
     }
-    data['msg'] = msg;
-    data['status'] = status;
+    data['msg'] = this.msg;
+    data['status'] = this.status;
     return data;
   }
 }
 
-class SignupUserInfo {
+class SignUserInfo {
+  int? userId;
   String? userName;
   String? phoneNumber;
   String? email;
@@ -35,9 +36,8 @@ class SignupUserInfo {
   String? signupDate;
   String? lastSignin;
   String? deviceType;
-  String? userId;
 
-  SignupUserInfo(
+  SignUserInfo(
       {this.userId,
         this.userName,
         this.phoneNumber,
@@ -50,8 +50,8 @@ class SignupUserInfo {
         this.lastSignin,
         this.deviceType});
 
-  SignupUserInfo.fromJson(Map<String, dynamic> json) {
-    userId = json["user_id"];
+  SignUserInfo.fromJson(Map<String, dynamic> json) {
+    userId = json['user_id'];
     userName = json['user_name'];
     phoneNumber = json['phone_number'];
     email = json['email'];
@@ -65,18 +65,18 @@ class SignupUserInfo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data["user_id"] = userId;
-    data['user_name'] = userName;
-    data['phone_number'] = phoneNumber;
-    data['email'] = email;
-    data['password'] = password;
-    data['user_status'] = userStatus;
-    data['is_deleted'] = isDeleted;
-    data['is_varified'] = isVarified;
-    data['signup_date'] = signupDate;
-    data['last_signin'] = lastSignin;
-    data['device_type'] = deviceType;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['user_id'] = this.userId;
+    data['user_name'] = this.userName;
+    data['phone_number'] = this.phoneNumber;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['user_status'] = this.userStatus;
+    data['is_deleted'] = this.isDeleted;
+    data['is_varified'] = this.isVarified;
+    data['signup_date'] = this.signupDate;
+    data['last_signin'] = this.lastSignin;
+    data['device_type'] = this.deviceType;
     return data;
   }
 }

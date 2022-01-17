@@ -4,18 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:spdycustomers/Model/JsonData/login_response.dart';
 import 'package:spdycustomers/Model/JsonData/signup_response.dart';
-
 import 'app_data.dart';
 
 class UpdateData{
 
   //update registration data
-  void updateRegistrationData(SignupUserInfo signupUserInfo,BuildContext context){
+  void updateRegistrationData(SignupResponse signupUserInfo,BuildContext context){
     Provider.of<AppData>(context,listen: false).updateRegistration(
-        signupUserInfo.userId!,
-        signupUserInfo.userName!, signupUserInfo.phoneNumber!,
-        signupUserInfo.email!, signupUserInfo.password!,
-        signupUserInfo.deviceType!);
+        signupUserInfo.userInfo!.userId!.toString(),
+        signupUserInfo.userInfo!.userName!, signupUserInfo.userInfo!.phoneNumber!,
+        signupUserInfo.userInfo!.email!, signupUserInfo.userInfo!.password!,
+        signupUserInfo.userInfo!.deviceType!);
   }
 
   //update login data

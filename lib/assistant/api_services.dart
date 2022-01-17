@@ -42,18 +42,20 @@ class ApiServices{
         // ignore: avoid_print
         print(response.body);
         final values = json.decode(response.body);
+        print("values genereated");
         SignupResponse signupResponse = SignupResponse.fromJson(values);
+        print("dataconver");
         // ignore: avoid_print
-        print(signupResponse.signupuserInfo!.userName);
+        print(signupResponse.userInfo!.email!);
         //return msg
-        return signupResponse.signupuserInfo;
+        return signupResponse;
       }
       else{
-        return "failed";
+        return null;
       }
     }
     catch(exp){
-      return "failed";
+      return null;
     }
   }
 

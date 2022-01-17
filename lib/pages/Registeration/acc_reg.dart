@@ -8,6 +8,7 @@ import 'package:spdycustomers/dataHandler/update_data.dart';
 import 'package:spdycustomers/pages/Login/welcome.dart';
 import 'package:spdycustomers/pages/Menu/home_page.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AccRegistration extends StatefulWidget {
   const AccRegistration({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class _AccRegistrationState extends State<AccRegistration> {
   TextEditingController cnfrmPassEditingController = TextEditingController();
 
   bool? _isChecked = false;
+  String? checknumber="";
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +37,14 @@ class _AccRegistrationState extends State<AccRegistration> {
   }
 
   body(){
-    return Container(
+    return
+      Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: backgroundColor(),
         child: Padding(
           padding:
-          const EdgeInsets.only(top: 70, bottom: 20, right: 35, left: 35),
+          const EdgeInsets.only(top: 40, bottom: 20, right: 35, left: 35),
           child: Stack(
             children: [
               getfields(),
@@ -52,160 +55,167 @@ class _AccRegistrationState extends State<AccRegistration> {
   }
 
   getfields(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        const Text(
-          "Account Registeration",
-          style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "User Name",
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            TextField(
-              controller: userNameEditingController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "john cena",
-                  hintStyle:
-                  TextStyle(color: Colors.grey, fontSize: 14.0)),
-              style: const TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Cell Phone Number",
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            TextField(
-              controller: phoneEditingController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "123-456-7890",
-                  hintStyle:
-                  TextStyle(color: Colors.grey, fontSize: 14.0)),
-              style: const TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Email",
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            TextField(
-              controller: emailEditingController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                  focusColor: Colors.black,
-                  border: InputBorder.none,
-                  filled: true,
-                  hintText: "example@example.com",
-                  fillColor: Colors.white,
-                  hintStyle:
-                  TextStyle(color: Colors.grey, fontSize: 15.0)),
-              style: const TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Password",
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            TextField(
-              onChanged: (value) {
-
-              },
-              controller: passEditingController,
-              obscureText: true,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: const InputDecoration(
-                  focusColor: Colors.black,
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "Type Password here..",
-                  hintStyle:
-                  TextStyle(color: Colors.grey, fontSize: 15.0)),
-              style: const TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Confirm Password",
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            TextField(
-              controller: cnfrmPassEditingController,
-              obscureText: true,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: const InputDecoration(
-                  focusColor: Colors.black,
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "Type Password here..",
-                  hintStyle:
-                  TextStyle(color: Colors.grey, fontSize: 15.0)),
-              style: const TextStyle(fontSize: 18.0),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Checkbox(
-              focusColor: Colors.white,
-              activeColor: Colors.white,
-              checkColor: Colors.blue,
-              hoverColor: Colors.white,
-
-              value: _isChecked,
-              onChanged: (val) {
-                setState(() {
-                  _isChecked = val;
-                  if (val == true) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Account Registeration",
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 6,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "User Name",
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+              TextField(
+                controller: userNameEditingController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "john cena",
+                    hintStyle:
+                    TextStyle(color: Colors.grey, fontSize: 14.0)),
+                style: const TextStyle(fontSize: 18.0),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "Cell Phone Number",
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+              TextField(
+                controller: phoneEditingController,
+                keyboardType: TextInputType.numberWithOptions(),
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "123-456-7890",
+                    hintStyle:
+                    TextStyle(color: Colors.grey, fontSize: 14.0)),
+                style: const TextStyle(fontSize: 18.0),
+                onChanged: (val){
+                  if(checknumber!.length==0) {
+                    setState(() {
+                      checknumber = val;
+                    });
                   }
-                });
-              },
-            ),
-            const Text("Terms of Services",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                )),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        getcreateAccountButton(),
-      ],
+                  else {
+                    checknumber = checknumber! + val;
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "Email",
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+              TextField(
+                controller: emailEditingController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                    focusColor: Colors.black,
+                    border: InputBorder.none,
+                    filled: true,
+                    hintText: "example@example.com",
+                    fillColor: Colors.white,
+                    hintStyle:
+                    TextStyle(color: Colors.grey, fontSize: 15.0)),
+                style: const TextStyle(fontSize: 18.0),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "Password",
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+              TextField(
+                onChanged: (value) {
+
+                },
+                controller: passEditingController,
+                obscureText: true,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: const InputDecoration(
+                    focusColor: Colors.black,
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Type Password here..",
+                    hintStyle:
+                    TextStyle(color: Colors.grey, fontSize: 15.0)),
+                style: const TextStyle(fontSize: 18.0),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "Confirm Password",
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+              TextField(
+                controller: cnfrmPassEditingController,
+                obscureText: true,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: const InputDecoration(
+                    focusColor: Colors.black,
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Type Password here..",
+                    hintStyle:
+                    TextStyle(color: Colors.grey, fontSize: 15.0)),
+                style: const TextStyle(fontSize: 18.0),
+              ),
+            ],
+          ),
+          /*const SizedBox(
+            height: 10,
+          ),*/
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Checkbox(
+                focusColor: Colors.white,
+                activeColor: Colors.white,
+                checkColor: Colors.blue,
+                hoverColor: Colors.white,
+
+                value: _isChecked,
+                onChanged: (val) {
+                  setState(() {
+                    _isChecked = val;
+                    if (val == true) {
+                    }
+                  });
+                },
+              ),
+              const Text("Terms of Services",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  )),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          getcreateAccountButton(),
+        ],
+      ),
     );
   }
   getcreateAccountButton(){
@@ -305,13 +315,14 @@ class _AccRegistrationState extends State<AccRegistration> {
       }
       else {
         //please wait wala dialog
-        showdialog("Authenticating, Please Wait",context);
-        SignupUserInfo signupUserInfo =await ApiServices.signupRequest(
+        //showdialog("Authenticating, Please Wait",context);
+        print("signining");
+        SignupResponse signupUserInfo =await ApiServices.signupRequest(
             userName, phone, email, password, deviceType);
-        makeFeildsEmpty();
-        Navigator.pop(context);
-        if(signupUserInfo.email!.isNotEmpty){
-          
+         if(signupUserInfo!=null){
+         makeFeildsEmpty();
+         //Navigator.pop(context);
+         if(signupUserInfo.userInfo!.email!.isNotEmpty){
           //save data using provider
           UpdateData().updateRegistrationData(signupUserInfo,context);
           
@@ -319,7 +330,8 @@ class _AccRegistrationState extends State<AccRegistration> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const HomePage()));
         }
-      }
+       }
+     }
     }
   }
 

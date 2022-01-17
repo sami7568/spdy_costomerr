@@ -48,11 +48,18 @@ class _CurrentOrdersState extends State<CurrentOrders> {
     });
   }
   }
-
   @override
   Widget build(BuildContext context) {
     //getCurrentOrder();
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: backgroundColor(),
+        leading: GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back)),
+      ),
       body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -60,7 +67,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 30, top: 80, right: 30),
+                padding: const EdgeInsets.only(left: 30, top: 10, right: 30),
                 child: Stack(
                   children: [
                     const Text("Current Orders",
@@ -285,6 +292,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                       //   backColorcanle = buttonPressBlueColor();
                       //   canceltextColor = Colors.white;
                       // });
+                      Navigator.pop(context);
                       textDialog();
                     }),
                 Container(height: 1, color: Colors.grey[300]),
@@ -297,6 +305,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20))),
                   onTap: () {
+                    Navigator.pop(context);
                      cancelOrderdialog();
                   },
                 ),
@@ -305,7 +314,6 @@ class _CurrentOrdersState extends State<CurrentOrders> {
           );
         });
   }
-
   void cancelOrderdialog() {
     showDialog(
       builder: (BuildContext context) {
@@ -342,7 +350,7 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                     children: [
                       GestureDetector(
                         onTap: (){
-
+                          Navigator.pop(context);
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -368,6 +376,8 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                       GestureDetector(
                         onTap:(){
                           //cancel order here
+                          Navigator.pop(context);
+
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -397,7 +407,6 @@ class _CurrentOrdersState extends State<CurrentOrders> {
       context: context,
     );
   }
-
   void textDialog() {
     showDialog(
       builder: (BuildContext context) {
@@ -431,9 +440,10 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                     child: Column(
                       children: const [
                         TextField(
+                          autofocus: true,
                           decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Type Here...',
+                              hintText: 'Type Here For support',
                               hintStyle:
                               TextStyle(color: Colors.grey),
                               contentPadding:
@@ -458,24 +468,30 @@ class _CurrentOrdersState extends State<CurrentOrders> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children:<Widget> [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 35,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(50.0),
-                              color: buttonPressBlueColor(),
-                              border: Border.all(
-                                  color: buttonPressBlueColor(),
-                                  width: 2)),
-                          child:const Center(
-                              child: Text(
-                                "Send to Support",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
-                              )),
+                        GestureDetector(
+                          onTap:(){
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 35,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(50.0),
+                                color: buttonPressBlueColor(),
+                                border: Border.all(
+                                    color: buttonPressBlueColor(),
+                                    width: 2),
+                            ),
+                            child:const Center(
+                                child: Text(
+                                  "Send to Support",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                )),
+                          ),
                         ),
                       ],
                     ),

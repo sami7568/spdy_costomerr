@@ -14,7 +14,6 @@ import 'package:spdycustomers/pages/PaymentSetting/payment_setting.dart';
 import 'package:spdycustomers/Widgets/colors.dart';
 import 'package:spdycustomers/prefdata.dart';
 
-import 'current_no_order.dart';
 import 'current_order.dart';
 
 class Menu extends StatefulWidget {

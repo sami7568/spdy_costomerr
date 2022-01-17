@@ -26,7 +26,7 @@ class _PayAccountSettingsState extends State<PayAccountSettings> {
 
   List<Cards>? cardlist=[];
   String? data="0";
-  String? cardExp,cardname, cardpin,namecard;
+  String? cardExp="",cardname="", cardpin="",namecard="";
   @override
   void initState() {
     getCardData();
@@ -151,6 +151,7 @@ class _PayAccountSettingsState extends State<PayAccountSettings> {
             ),
              Center(
                 child: Text(
+                  cardname!.isEmpty ? "":
                   cardname!.toUpperCase(),
                   style: const TextStyle(
                       color: Colors.black,
@@ -539,22 +540,27 @@ class _PayAccountSettingsState extends State<PayAccountSettings> {
                   ),
                   Column(
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.0),
-                            color: buttonPressRedColor(),
-                            border: Border.all(
-                                color: buttonPressRedColor(), width: 2)),
-                        child: const Center(
-                            child: Text(
-                              "No, Keep Credit Card",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            )),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: buttonPressRedColor(),
+                              border: Border.all(
+                                  color: buttonPressRedColor(), width: 2)),
+                          child: const Center(
+                              child: Text(
+                                "No, Keep Credit Card",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              )),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
