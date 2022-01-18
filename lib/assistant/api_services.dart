@@ -86,7 +86,7 @@ class ApiServices{
       }
       else {
         // ignore: null_check_always_fails
-        return loginResponse = null!;
+        return null!;
       }
 
   }

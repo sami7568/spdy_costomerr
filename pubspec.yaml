@@ -43,12 +43,12 @@ dependencies:
   pin_code_fields: ^7.3.0
   dots_indicator: ^2.0.0
   flutter_polyline_points: ^1.0.0
+  progress_state_button: ^1.0.2
   http:
   shared_preferences: ^2.0.8
   awesome_dialog: ^2.1.1
   dart_animation_controller:
   flutter_screenutil: ^5.1.0
-
 
 dev_dependencies:
   flutter_test:

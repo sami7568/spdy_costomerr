@@ -40,6 +40,7 @@ class _CarInfoState extends State<CarInfo> {
           width: MediaQuery.of(context).size.width,
           color: backgroundColor(),
           child: Stack(
+
             children: [
              getFields(),
               getNavi(),
@@ -49,13 +50,13 @@ class _CarInfoState extends State<CarInfo> {
   }
   getFields(){
     return  Padding(
-      padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
+      padding: const EdgeInsets.only(left: 30, top: 60, right: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text("Car Information", style:
           TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold)),
-          //const SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           const Text("Car Maker", style: TextStyle(fontSize: 17, color: Colors.white, )),
          // const SizedBox(height: 1,),
           getCarMaker(),
