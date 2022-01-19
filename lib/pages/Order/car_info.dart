@@ -35,15 +35,14 @@ class _CarInfoState extends State<CarInfo> {
 
   body(){
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           color: backgroundColor(),
           child: Stack(
-
             children: [
-             getFields(),
-              getNavi(),
+             getFields(), getNavi(),
             ],
           )),
     );
@@ -264,13 +263,13 @@ class _CarInfoState extends State<CarInfo> {
         style: const TextStyle(color: Colors.black),
 
         items: <String>[
-          'Android',
-          'IOS',
-          'Flutter',
-          'Node',
-          'Java',
-          'Python',
-          'PHP',
+          'Honda Civic',
+          'Suzuki Alto',
+          'Honda City',
+          'Reborn',
+          'Furtunur',
+          'Xli',
+          'Grande',
         ].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -308,15 +307,14 @@ class _CarInfoState extends State<CarInfo> {
         value: _carMakerchosenValue,
         //elevation: 5,
         style: const TextStyle(color: Colors.black),
-
         items: <String>[
-          'Android',
-          'IOS',
-          'Flutter',
-          'Node',
-          'Java',
-          'Python',
-          'PHP',
+          'Toyota',
+          'Volkswagen',
+          'Daimler',
+          'Ford',
+          'Honda',
+          'Bayerische',
+          'Motoren',
         ].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,

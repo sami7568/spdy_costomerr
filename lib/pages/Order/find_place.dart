@@ -128,7 +128,6 @@ class _FindPlaceState extends State<FindPlace> with TickerProviderStateMixin {
       }
       if(res["status"]=="OK"){
         var prediction=res["predictions"];
-
         var placesList = (prediction as List).map((e) => PlacePredictions.fromJson(e)).toList();
         setState(() {
           placesPredictionList= placesList;
@@ -184,6 +183,7 @@ class _FindPlaceState extends State<FindPlace> with TickerProviderStateMixin {
             },
             autofocus: true,
             onChanged: (val){
+              print(val);
               findplace(val, widget.selectlocat);
             },
             decoration: InputDecoration(hintText: "Enter your Address",hintStyle: TextStyle(color: Colors.grey[500]), border:InputBorder.none,
